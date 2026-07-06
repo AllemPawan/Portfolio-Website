@@ -25,11 +25,36 @@ Open http://localhost:8000, upload a `.db` file, and start asking questions.
 
 ## Architecture
 
-```
-Frontend (HTML + JS)  ──REST API──►  FastAPI Backend  ──►  Ollama (LLM)
-                                         │
-                                         ▼
-                                      SQLite DB
+```mermaid
+flowchart LR
+  subgraph FE["Frontend (HTML + JS)"]
+    SB["Sidebar<br/>(DB info, samples)"]
+    CHAT["Chat Interface"]
+    RP["Results Panel<br/>(table + charts)"]
+  end
+
+  FE -- "REST API" --> BE["FastAPI Backend"]
+
+  subgraph BE["FastAPI Backend"]
+    UPLOAD["/upload-db"]
+    QUERY["/query"]
+    SCHEMA["/schema /tables<br/>/export /history"]
+
+    subgraph SA["SQL Agent"]
+      SR["Schema Reader"]
+      SV["Safety Validator<br/>(SELECT-only)"]
+      QE["Query Executor"]
+    end
+
+    UPLOAD --> SA
+    QUERY --> SA
+    SCHEMA --> SA
+  end
+
+  SA --> LLM["Ollama (LLM)"]
+  LLM -->|"SQL generation"| SA
+  LLM -->|"explanation"| SA
+  SA --> DB["SQLite Database<br/>(uploaded .db file)"]
 ```
 
 ## Features

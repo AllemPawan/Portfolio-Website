@@ -1,0 +1,183 @@
+- generic [active] [ref=f4e1]:
+  - navigation [ref=f4e2]:
+    - generic [ref=f4e4]:
+      - link "PA." [ref=f4e5] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=f4e6]:
+        - link "About" [ref=f4e7] [cursor=pointer]:
+          - /url: "#about"
+        - link "Experience" [ref=f4e8] [cursor=pointer]:
+          - /url: "#experience"
+        - link "Skills" [ref=f4e9] [cursor=pointer]:
+          - /url: "#skills"
+        - link "Projects" [ref=f4e10] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Contact" [ref=f4e11] [cursor=pointer]:
+          - /url: "#contact"
+        - link "Resume" [ref=f4e12] [cursor=pointer]:
+          - /url: Pawan_Allem_Resume_(30-6-2026).pdf
+          - img [ref=f4e13]
+          - text: Resume
+  - generic [ref=f4e15]:
+    - generic [ref=f4e18]:
+      - paragraph [ref=f4e19]: Applied AI Engineer — Hyderabad, India
+      - heading "Hi, I'm Pawan Allem" [level=1] [ref=f4e20]
+      - paragraph [ref=f4e21]: Agentic AI Systems · LLM Engineering · Production AI. Building reliable AI systems that reason, retrieve, plan, and execute real work — not isolated demonstrations.
+      - generic [ref=f4e22]:
+        - link "View Projects" [ref=f4e23] [cursor=pointer]:
+          - /url: "#projects"
+          - text: View Projects
+          - img [ref=f4e24]
+        - link "Download Resume" [ref=f4e26] [cursor=pointer]:
+          - /url: Pawan_Allem_Resume_(30-6-2026).pdf
+          - img [ref=f4e27]
+          - text: Download Resume
+    - img [ref=f4e30]
+  - generic [ref=f4e34]:
+    - generic [ref=f4e35]:
+      - paragraph [ref=f4e36]: About Me
+      - heading "Applied AI Engineer with 4+ years in production" [level=2] [ref=f4e37]:
+        - text: Applied AI Engineer
+        - text: with 4+ years in production
+      - generic [ref=f4e38]:
+        - paragraph [ref=f4e39]: Applied AI Engineer with 4+ years of experience building production AI systems and evolving into Agentic AI engineering. I design local-first AI platforms, intelligent developer tools, and autonomous workflows using LangGraph, LangChain, MCP, Ollama, FastAPI, and modern LLMs.
+        - paragraph [ref=f4e40]: I currently architect an Internal AI Productivity Platform adopted by a 10-member engineering team — automating documentation, code understanding, engineering knowledge retrieval, project planning, terminal operations, report generation, and reusable workflows.
+        - paragraph [ref=f4e41]: "My engineering philosophy: build reliable AI systems that reason, retrieve, plan, and execute real work — not isolated demonstrations."
+      - generic [ref=f4e42]:
+        - link "GitHub" [ref=f4e43] [cursor=pointer]:
+          - /url: https://github.com/AllemPawan
+          - img [ref=f4e44]
+          - text: GitHub
+        - link "LinkedIn" [ref=f4e46] [cursor=pointer]:
+          - /url: https://linkedin.com/in/pawan-allem
+          - img [ref=f4e47]
+          - text: LinkedIn
+    - generic [ref=f4e50]:
+      - generic [ref=f4e52]:
+        - generic [ref=f4e53]: 🤖
+        - paragraph [ref=f4e54]: Applied AI Engineer
+      - generic [ref=f4e55]: ⚡
+  - generic [ref=f4e57]:
+    - generic [ref=f4e58]:
+      - paragraph [ref=f4e59]: Expertise
+      - heading "Tools & Technologies" [level=2] [ref=f4e60]
+    - generic [ref=f4e61]:
+      - generic [ref=f4e62]:
+        - generic [ref=f4e63]: 🧠
+        - heading "Agentic AI" [level=3] [ref=f4e64]
+        - paragraph [ref=f4e65]: LangGraph, LangChain, AI Workflow Automation, MCP, Tool Calling, Deep Research Agents, Prompt Engineering
+      - generic [ref=f4e66]:
+        - generic [ref=f4e67]: 🤖
+        - heading "LLM Engineering" [level=3] [ref=f4e68]
+        - paragraph [ref=f4e69]: Gemma 4, Qwen Coder, Ollama, Local LLMs, RAG, Embeddings, Structured Outputs, Fine-tuning
+      - generic [ref=f4e70]:
+        - generic [ref=f4e71]: ⚙️
+        - heading "AI Engineering" [level=3] [ref=f4e72]
+        - paragraph [ref=f4e73]: Python, FastAPI, REST APIs, SQL, Docker, Git, Modular Architecture, CI/CD
+      - generic [ref=f4e74]:
+        - generic [ref=f4e75]: 📊
+        - heading "ML & Computer Vision" [level=3] [ref=f4e76]
+        - paragraph [ref=f4e77]: PyTorch, TensorFlow, TensorFlow Lite, YOLO, OCR, Scikit-learn, Computer Vision
+  - generic [ref=f4e79]:
+    - generic [ref=f4e80]:
+      - paragraph [ref=f4e81]: Career
+      - heading "Experience" [level=2] [ref=f4e82]
+    - generic [ref=f4e84]:
+      - generic [ref=f4e86]:
+        - heading "Machine Learning Engineer (Applied AI)" [level=3] [ref=f4e87]
+        - paragraph [ref=f4e88]: Vassar Labs — May 2022 – Present
+      - list [ref=f4e89]:
+        - listitem [ref=f4e90]:
+          - generic [ref=f4e91]: ▸
+          - generic [ref=f4e92]: Architected and delivered production AI systems across intelligent automation, computer vision, edge AI, and enterprise software.
+        - listitem [ref=f4e93]:
+          - generic [ref=f4e94]: ▸
+          - generic [ref=f4e95]: Designed and built an Internal AI Productivity Platform using LangGraph, LangChain, Ollama, FastAPI, MCP, Gemma 4, and Qwen Coder — automating documentation, repository exploration, code explanation, project planning, report generation, terminal operations, and engineering workflows.
+        - listitem [ref=f4e96]:
+          - generic [ref=f4e97]: ▸
+          - generic [ref=f4e98]: Engineered a secure local-first AI architecture where routine engineering work is executed by local LLMs while Claude Code handles architecture, complex implementation, and higher-order reasoning.
+        - listitem [ref=f4e99]:
+          - generic [ref=f4e100]: ▸
+          - generic [ref=f4e101]: Collaborated with engineering leadership to identify repetitive knowledge work and transform it into reusable AI capabilities adopted across a 10-member team.
+        - listitem [ref=f4e102]:
+          - generic [ref=f4e103]: ▸
+          - generic [ref=f4e104]: Built modular AI infrastructure emphasizing extensibility, maintainability, and measurable developer productivity gains.
+  - generic [ref=f4e106]:
+    - generic [ref=f4e107]:
+      - paragraph [ref=f4e108]: Portfolio
+      - heading "Featured Projects" [level=2] [ref=f4e109]
+      - paragraph [ref=f4e110]: AI systems and data science projects built for real-world impact. Each project includes detailed documentation, architecture notes, and live demos.
+    - generic [ref=f4e111]:
+      - link "💬 AI Chatbot Full-featured conversational AI with streaming responses, markdown rendering, code highlighting, multi-model support, and dark mode. Ollama Qwen Streaming Try it →" [ref=f4e112] [cursor=pointer]:
+        - /url: projects/ai-chatbot/
+        - generic [ref=f4e113]: 💬
+        - heading "AI Chatbot" [level=3] [ref=f4e114]
+        - paragraph [ref=f4e115]: Full-featured conversational AI with streaming responses, markdown rendering, code highlighting, multi-model support, and dark mode.
+        - generic [ref=f4e116]:
+          - generic [ref=f4e117]: Ollama
+          - generic [ref=f4e118]: Qwen
+          - generic [ref=f4e119]: Streaming
+        - generic [ref=f4e120]: Try it →
+      - link "📄 PDF Chat (RAG) Chat with your PDFs using RAG. Upload documents, extract & chunk text, generate embeddings, and ask questions with cited answers. LangChain FAISS Ollama View project →" [ref=f4e121] [cursor=pointer]:
+        - /url: projects/pdf-chat-rag/
+        - generic [ref=f4e122]: 📄
+        - heading "PDF Chat (RAG)" [level=3] [ref=f4e123]
+        - paragraph [ref=f4e124]: Chat with your PDFs using RAG. Upload documents, extract & chunk text, generate embeddings, and ask questions with cited answers.
+        - generic [ref=f4e125]:
+          - generic [ref=f4e126]: LangChain
+          - generic [ref=f4e127]: FAISS
+          - generic [ref=f4e128]: Ollama
+        - generic [ref=f4e129]: View project →
+      - link "📋 Resume Analyzer AI-powered resume analysis with ATS scoring, skill gap detection, grammar suggestions, bullet rewrites, and JD comparison. LLM FastAPI Docker View project →" [ref=f4e130] [cursor=pointer]:
+        - /url: projects/resume-analyzer/
+        - generic [ref=f4e131]: 📋
+        - heading "Resume Analyzer" [level=3] [ref=f4e132]
+        - paragraph [ref=f4e133]: AI-powered resume analysis with ATS scoring, skill gap detection, grammar suggestions, bullet rewrites, and JD comparison.
+        - generic [ref=f4e134]:
+          - generic [ref=f4e135]: LLM
+          - generic [ref=f4e136]: FastAPI
+          - generic [ref=f4e137]: Docker
+        - generic [ref=f4e138]: View project →
+      - link "🖼️ OCR Reader Extract text from images with EasyOCR & Tesseract. Confidence scoring, region highlighting, translation, and batch processing. EasyOCR Tesseract FastAPI View project →" [ref=f4e139] [cursor=pointer]:
+        - /url: projects/ocr-reader/
+        - generic [ref=f4e140]: 🖼️
+        - heading "OCR Reader" [level=3] [ref=f4e141]
+        - paragraph [ref=f4e142]: Extract text from images with EasyOCR & Tesseract. Confidence scoring, region highlighting, translation, and batch processing.
+        - generic [ref=f4e143]:
+          - generic [ref=f4e144]: EasyOCR
+          - generic [ref=f4e145]: Tesseract
+          - generic [ref=f4e146]: FastAPI
+        - generic [ref=f4e147]: View project →
+      - link "📊 Sentiment Analysis Classify text as Positive/Neutral/Negative with confidence scores, batch CSV processing, word clouds, and interactive charts. Transformers FastAPI Docker View project →" [ref=f4e148] [cursor=pointer]:
+        - /url: projects/sentiment-analysis/
+        - generic [ref=f4e149]: 📊
+        - heading "Sentiment Analysis" [level=3] [ref=f4e150]
+        - paragraph [ref=f4e151]: Classify text as Positive/Neutral/Negative with confidence scores, batch CSV processing, word clouds, and interactive charts.
+        - generic [ref=f4e152]:
+          - generic [ref=f4e153]: Transformers
+          - generic [ref=f4e154]: FastAPI
+          - generic [ref=f4e155]: Docker
+        - generic [ref=f4e156]: View project →
+      - link "🗄️ SQL AI Assistant Upload a SQLite database and query it in plain English. AI generates, explains, and executes SQL safely with auto charts. FastAPI Ollama SQLite View project →" [ref=f4e157] [cursor=pointer]:
+        - /url: projects/sql-ai-assistant/
+        - generic [ref=f4e158]: 🗄️
+        - heading "SQL AI Assistant" [level=3] [ref=f4e159]
+        - paragraph [ref=f4e160]: Upload a SQLite database and query it in plain English. AI generates, explains, and executes SQL safely with auto charts.
+        - generic [ref=f4e161]:
+          - generic [ref=f4e162]: FastAPI
+          - generic [ref=f4e163]: Ollama
+          - generic [ref=f4e164]: SQLite
+        - generic [ref=f4e165]: View project →
+  - contentinfo [ref=f4e166]:
+    - generic [ref=f4e168]:
+      - paragraph [ref=f4e169]: © 2026 Pawan Allem. Built with vanilla everything.
+      - generic [ref=f4e170]:
+        - link [ref=f4e171] [cursor=pointer]:
+          - /url: https://github.com/AllemPawan
+          - img [ref=f4e172]
+        - link [ref=f4e174] [cursor=pointer]:
+          - /url: https://linkedin.com/in/pawan-allem
+          - img [ref=f4e175]
+        - link [ref=f4e177] [cursor=pointer]:
+          - /url: mailto:allem.pawan@gmail.com
+          - img [ref=f4e178]

@@ -1,0 +1,4 @@
+[     286ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/:63
+[     522ms] [INFO] [Chatbot][2026-07-06T18:06:58.021Z] Chatbot initialized {endpoint: https://peso-clubhouse-refuse.ngrok-free.dev, model: qwen3:8b} @ http://localhost:8000/projects/ai-chatbot/:252
+[     968ms] [ERROR] Access to fetch at 'https://peso-clubhouse-refuse.ngrok-free.dev/api/tags' from origin 'http://localhost:8000' has been blocked by CORS policy: Request header field ngrok-skip-browser-warning is not allowed by Access-Control-Allow-Headers in preflight response. @ http://localhost:8000/projects/ai-chatbot/:0
+[     968ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://peso-clubhouse-refuse.ngrok-free.dev/api/tags:0

@@ -1,0 +1,42 @@
+- generic [active] [ref=f10e1]:
+  - navigation [ref=f10e2]:
+    - generic [ref=f10e4]:
+      - link "Portfolio" [ref=f10e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=f10e6]
+        - text: Portfolio
+      - generic [ref=f10e8]:
+        - generic [ref=f10e9]: AI Chatbot
+        - generic [ref=f10e10]: — Ollama · Qwen
+      - button "Settings" [ref=f10e11] [cursor=pointer]:
+        - img [ref=f10e12]
+  - generic [ref=f10e15]:
+    - generic [ref=f10e17]:
+      - generic [ref=f10e18]: 🤖
+      - generic [ref=f10e19]:
+        - generic [ref=f10e20]:
+          - generic [ref=f10e21]: Assistant
+          - generic [ref=f10e22]: ready
+        - paragraph [ref=f10e24]:
+          - text: Hi! I'm running on
+          - strong [ref=f10e25]: Qwen 2.5 (3B)
+          - text: via Ollama. I can help with coding, analysis, writing, and more. Try me!
+    - generic [ref=f10e26]:
+      - generic [ref=f10e27]:
+        - combobox [ref=f10e28]:
+          - option "Qwen 2.5 (3B)" [selected]
+        - generic [ref=f10e29]:
+          - generic "Temperature" [ref=f10e30]: 🌡️
+          - slider [ref=f10e31] [cursor=pointer]: "0.7"
+          - generic [ref=f10e32]: "0.7"
+        - generic [ref=f10e33]:
+          - generic "Max tokens" [ref=f10e34]: 📏
+          - slider [ref=f10e35] [cursor=pointer]: "2048"
+          - generic [ref=f10e36]: 2K
+        - button "📥 Export" [ref=f10e37] [cursor=pointer]
+        - button "🗑️ Clear" [ref=f10e38] [cursor=pointer]
+      - generic [ref=f10e39]:
+        - textbox "Type a message..." [ref=f10e40]
+        - button [ref=f10e41] [cursor=pointer]:
+          - img [ref=f10e42]
+      - paragraph [ref=f10e44]: Responses streamed from peso-clubhouse-refuse.ngrok-free.dev

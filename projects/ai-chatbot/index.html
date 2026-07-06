@@ -95,16 +95,7 @@
           <p class="text-xs text-slate-500 mt-1">The base URL of your Ollama server (no trailing slash).</p>
         </div>
 
-        <div>
-          <label for="header-input" class="block text-sm font-medium text-slate-400 mb-1.5">Custom Header (optional)</label>
-          <div class="flex gap-2">
-            <input id="header-name" type="text" class="flex-1 w-1/3 px-3 py-2 rounded-lg bg-surface-800 border border-slate-700/60 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-primary-500 transition-colors" placeholder="Header name" />
-            <input id="header-value" type="text" class="flex-1 px-3 py-2 rounded-lg bg-surface-800 border border-slate-700/60 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-primary-500 transition-colors" placeholder="Header value" />
-          </div>
-          <p class="text-xs text-slate-500 mt-1">Set if your endpoint requires a bypass header (e.g. <code class="text-slate-400">ngrok-skip-browser-warning</code>).</p>
-        </div>
-
-        <div class="flex items-center gap-3 pt-2">
+        <div class="flex items-center gap-3">
           <button id="test-conn-btn" class="px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium transition-colors disabled:opacity-50">
             Test Connection
           </button>
@@ -130,7 +121,7 @@
             <span class="text-xs text-slate-500">ready</span>
           </div>
           <div class="msg-content text-sm text-slate-300 leading-relaxed">
-            <p>Hi! I'm running on <strong>Qwen 3 (8B)</strong> via Ollama. I can help with coding, analysis, writing, and more. Try me!</p>
+            <p>Hi! I'm running on <strong>Qwen 2.5 (3B)</strong> via Ollama. I can help with coding, analysis, writing, and more. Try me!</p>
           </div>
         </div>
       </div>
@@ -147,7 +138,6 @@
     <div class="shrink-0 py-3 border-t border-white/5">
       <div class="flex flex-wrap items-center gap-2 mb-2">
         <select id="model-select" class="text-xs bg-surface-800 border border-slate-700/60 rounded-lg px-2 py-1.5 text-slate-300 focus:outline-none focus:border-primary-500">
-          <option value="qwen3:8b">Qwen 3 (8B)</option>
           <option value="qwen2.5:3b">Qwen 2.5 (3B)</option>
         </select>
 
@@ -194,8 +184,6 @@
       } catch (_) { /* ignore */ }
       return {
         endpoint: 'https://peso-clubhouse-refuse.ngrok-free.dev',
-        headerName: 'ngrok-skip-browser-warning',
-        headerValue: 'true',
       };
     }
 
@@ -207,14 +195,6 @@
 
     function getEndpoint() {
       return config.endpoint.replace(/\/+$/, '');
-    }
-
-    function getCustomHeaders() {
-      const h = {};
-      if (config.headerName && config.headerValue) {
-        h[config.headerName] = config.headerValue;
-      }
-      return h;
     }
 
     // ─── State ───────────────────────────────────────────────────────────
@@ -241,8 +221,6 @@
     const settingsCancel = document.getElementById('settings-cancel');
     const settingsSave = document.getElementById('settings-save');
     const endpointInput = document.getElementById('endpoint-input');
-    const headerNameInput = document.getElementById('header-name');
-    const headerValueInput = document.getElementById('header-value');
     const testConnBtn = document.getElementById('test-conn-btn');
     const connStatus = document.getElementById('conn-status');
     const endpointDisplay = document.getElementById('endpoint-display');
@@ -414,16 +392,6 @@
       requestAnimationFrame(() => { chatEl.scrollTop = chatEl.scrollHeight; });
     }
 
-    // ─── Ollama – fetch available models ─────────────────────────────────
-    async function fetchModels() {
-      const url = `${getEndpoint()}/api/tags`;
-      const headers = { ...getCustomHeaders() };
-      const res = await fetch(url, { headers });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      return (data.models || []).map(m => ({ name: m.name, label: `${m.name} (${(m.details?.parameter_size || '?')})` }));
-    }
-
     // ─── Ollama – stream chat ────────────────────────────────────────────
     async function streamChat(model, msgs, temperature, maxTokens) {
       const body = JSON.stringify({
@@ -439,14 +407,10 @@
       log('info', `Sending request to ${getEndpoint()}/api/chat`, { model, temperature, maxTokens, messageCount: msgs.length });
 
       abortController = new AbortController();
-      const headers = {
-        'Content-Type': 'application/json',
-        ...getCustomHeaders()
-      };
 
       const response = await fetch(`${getEndpoint()}/api/chat`, {
         method: 'POST',
-        headers,
+        headers: { 'Content-Type': 'application/json' },
         body,
         signal: abortController.signal
       });
@@ -621,8 +585,6 @@
     // ─── Settings modal ──────────────────────────────────────────────────
     function openSettings() {
       endpointInput.value = getEndpoint();
-      headerNameInput.value = config.headerName || '';
-      headerValueInput.value = config.headerValue || '';
       connStatus.textContent = '';
       settingsModal.classList.remove('hidden');
     }
@@ -640,8 +602,6 @@
 
     settingsSave.addEventListener('click', () => {
       config.endpoint = endpointInput.value.trim().replace(/\/+$/, '');
-      config.headerName = headerNameInput.value.trim();
-      config.headerValue = headerValueInput.value.trim();
       saveConfig(config);
       updateEndpointDisplay();
       log('info', 'Config saved', { endpoint: config.endpoint });
@@ -651,17 +611,13 @@
     // ─── Test connection ─────────────────────────────────────────────────
     testConnBtn.addEventListener('click', async () => {
       const url = endpointInput.value.trim().replace(/\/+$/, '');
-      const hName = headerNameInput.value.trim();
-      const hValue = headerValueInput.value.trim();
-      const headers = {};
-      if (hName && hValue) headers[hName] = hValue;
 
       testConnBtn.disabled = true;
       connStatus.textContent = 'Testing...';
       connStatus.className = 'text-xs text-slate-400';
 
       try {
-        const res = await fetch(`${url}/api/tags`, { headers });
+        const res = await fetch(`${url}/api/tags`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         const models = (data.models || []).map(m => m.name).join(', ');
@@ -677,22 +633,6 @@
       }
     });
 
-    // ─── Reload models list (after settings change) ──────────────────────
-    async function refreshModelList() {
-      try {
-        const models = await fetchModels();
-        if (models.length > 0) {
-          const current = modelSelect.value;
-          modelSelect.innerHTML = models.map(m =>
-            `<option value="${m.name}" ${m.name === current ? 'selected' : ''}>${m.label}</option>`
-          ).join('');
-          log('info', 'Models refreshed', { count: models.length });
-        }
-      } catch (_) {
-        // silent — user will see error when they try to chat
-      }
-    }
-
     // ─── Keyboard shortcut ──────────────────────────────────────────────
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && isStreaming && abortController) {
@@ -703,7 +643,6 @@
 
     // ─── Init ────────────────────────────────────────────────────────────
     updateEndpointDisplay();
-    refreshModelList();
     log('info', 'Chatbot initialized', { endpoint: getEndpoint(), model: modelSelect.value });
   </script>
 </body>

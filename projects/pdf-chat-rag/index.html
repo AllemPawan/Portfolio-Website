@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PDF Chat (RAG) — Pawan Allem</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#6366f1',primaryTextColor:'#fff',primaryBorderColor:'#4f46e5',lineColor:'#6366f1',secondaryColor:'#1e293b',tertiaryColor:'#0f172a',clusterBkg:'#172033',clusterBorder:'#334155',nodeBorder:'#334155',mainBkg:'#1e293b',fontSize:'14px'}});</script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -200,41 +202,41 @@
   <section class="py-16 border-b border-white/5">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white mb-6">Architecture</h2>
-      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60 overflow-x-auto">
-        <pre class="text-sm text-slate-400 font-mono leading-relaxed">
-┌─────────────────────────────────────────────────────────┐
-│                     User Uploads PDF                     │
-└────────────────────────┬────────────────────────────────┘
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                   PDF Ingestion Pipeline                 │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
-│  │ Text     │─►│ Chunker  │─►│  Embedding Model     │  │
-│  │ Extractor│  │ (overlap)│  │  (local LLM)         │  │
-│  └──────────┘  └──────────┘  └──────────┬───────────┘  │
-│                                         ▼               │
-│                                  ┌──────────────┐       │
-│                                  │  FAISS Index  │       │
-│                                  │  (vector DB)  │       │
-│                                  └──────┬───────┘       │
-└─────────────────────────────────────────┼───────────────┘
-                                          │
-┌─────────────────────────────────────────┼───────────────┐
-│                    Query Flow            ▼               │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
-│  │ User     │─►│ Embed   │─►│  FAISS Similarity     │  │
-│  │ Question │  │ Query   │  │  Search               │  │
-│  └──────────┘  └──────────┘  └──────────┬───────────┘  │
-│                                         ▼               │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │  LLM generates answer from retrieved chunks      │   │
-│  └──────────────────────┬───────────────────────────┘   │
-│                         ▼                               │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │ Answer +     │  │ Source       │  │ Similarity   │  │
-│  │ Explanation │  │ Chunks       │  │ Scores       │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘</pre>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+        <div class="mermaid">
+flowchart TD
+  USER["User Uploads PDF"] --> INGEST["PDF Ingestion Pipeline"]
+
+  subgraph INGESTION["Ingestion Pipeline"]
+    EXTRACT["Text Extractor<br/>(PyMuPDF + OCR)"] --> CHUNK["Chunker<br/>(overlap, sentence boundaries)"]
+    CHUNK --> EMBED["Embedding Model<br/>(sentence-transformers)"]
+    EMBED --> FAISS["FAISS Vector Index"]
+  end
+
+  USER -- "Asks question" --> QUERY
+
+  subgraph QUERY["Query Flow"]
+    Q["User Question"] --> Q_EMBED["Embed Query"]
+    Q_EMBED --> SEARCH["FAISS Similarity Search"]
+    SEARCH --> RETRIEVE["Retrieve Top-K Chunks"]
+    RETRIEVE --> LLM["LLM Generation<br/>(Ollama)"]
+  end
+
+  INGEST --> FAISS
+  FAISS --> SEARCH
+  LLM --> OUT1["Answer + Explanation"]
+  LLM --> OUT2["Source Chunks"]
+  LLM --> OUT3["Similarity Scores"]
+
+  style USER fill:#6366f1,stroke:#4f46e5,color:#fff
+  style INGESTION fill:#0f172a,stroke:#334155,color:#94a3b8
+  style QUERY fill:#0f172a,stroke:#334155,color:#94a3b8
+  style FAISS fill:#172033,stroke:#10b981,color:#94a3b8
+  style LLM fill:#172033,stroke:#f59e0b,color:#94a3b8
+  style OUT1 fill:#172033,stroke:#334155,color:#94a3b8
+  style OUT2 fill:#172033,stroke:#334155,color:#94a3b8
+  style OUT3 fill:#172033,stroke:#334155,color:#94a3b8
+</div>
       </div>
     </div>
   </section>

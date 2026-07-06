@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Weather Agent — Pawan Allem</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#6366f1',primaryTextColor:'#fff',primaryBorderColor:'#4f46e5',lineColor:'#6366f1',secondaryColor:'#1e293b',tertiaryColor:'#0f172a',clusterBkg:'#172033',clusterBorder:'#334155',nodeBorder:'#334155',mainBkg:'#1e293b',fontSize:'14px'}});</script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -172,39 +174,38 @@
   <section class="py-16 border-b border-white/5">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white mb-6">Architecture</h2>
-      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60 overflow-x-auto">
-        <pre class="text-sm text-slate-400 font-mono leading-relaxed">
-┌─────────────────────────────────────────────────────────┐
-│              User asks "What's the weather?"             │
-└────────────────────────┬────────────────────────────────┘
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                   LLM Agent Pipeline                     │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
-│  │ User     │─►│ LLM      │──┤  Tool Decision       │  │
-│  │ Message  │  │(Ollama)  │  │  → call_weather()    │  │
-│  └──────────┘  └──────────┘  └──────────┬───────────┘  │
-│                                         ▼               │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │  Weather API Tool                                 │   │
-│  │  → OpenWeatherMap / WeatherAPI.com                │   │
-│  │  → Fetches current conditions                    │   │
-│  │  → Fetches forecast data                         │   │
-│  │  → Returns structured JSON                       │   │
-│  └──────────────────────┬───────────────────────────┘   │
-│                         ▼                               │
-│  ┌──────────┐  ┌──────────────────────────────────┐    │
-│  │ LLM      │─►│ Formatted response to user       │    │
-│  │ Interprets│  │ → Natural language summary       │    │
-│  │ Results   │  │ → Structured weather data        │    │
-│  └──────────┘  └──────────────────────────────────┘    │
-│                                                         │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │  Conversation Memory (Buffer)                     │   │
-│  │  → Remembers previous cities and queries          │   │
-│  │  → Supports follow-up questions                   │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘</pre>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+        <div class="mermaid">
+flowchart TD
+  USER["User: 'What's the weather?'"] --> AGENT["LLM Agent Pipeline"]
+
+  subgraph AGENT["LLM Agent Pipeline"]
+    MSG["User Message"] --> LLM["LLM<br/>(Ollama)"]
+    LLM --> TD["Tool Decision"]
+    TD -->|"call_weather()"| API_TOOL["Weather API Tool"]
+    TD -->|"no tool needed"| DIRECT["Direct Response"]
+
+    API_TOOL -->|"current conditions"| LLM2["LLM Interprets Results"]
+    API_TOOL -->|"forecast data"| LLM2
+    API_TOOL -->|"structured JSON"| LLM2
+    LLM2 --> RESP["Formatted Response"]
+
+    subgraph MEM["Conversation Memory"]
+      MEM_BUF["Buffer Memory<br/>→ Previous cities<br/>→ Follow-up context"]
+    end
+    MEM_BUF --> LLM
+    MEM_BUF --> LLM2
+  end
+
+  RESP --> USER_RESP["Natural Language Summary<br/>+ Structured Weather Data"]
+
+  style USER fill:#6366f1,stroke:#4f46e5,color:#fff
+  style AGENT fill:#0f172a,stroke:#334155,color:#94a3b8
+  style LLM fill:#172033,stroke:#6366f1,color:#fff
+  style API_TOOL fill:#172033,stroke:#10b981,color:#94a3b8
+  style MEM fill:#172033,stroke:#f59e0b,color:#94a3b8
+  style USER_RESP fill:#1e293b,stroke:#334155,color:#e2e8f0
+</div>
       </div>
     </div>
   </section>

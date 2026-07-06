@@ -91,6 +91,15 @@ docker compose up -d
 - If the API is behind ngrok, the instance needs `OLLAMA_ORIGINS=*` to allow browser CORS requests
 - Click "Test Connection" in Settings to verify endpoint before chatting
 
+## Architectural Diagrams
+
+- **All architecture sections use Mermaid.js** (via CDN) for diagram rendering — no ASCII art, no draw.io
+- Mermaid is loaded from `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` in each project page
+- Dark theme initialized with `mermaid.initialize({theme:'dark',themeVariables:{...}})`
+- Styles use the slate/purple palette matching the portfolio's Tailwind dark theme
+- README.md diagrams use native GitHub Mermaid rendering (fenced code blocks with ````mermaid`)
+- When adding a new project, include both the Mermaid CDN `<script>` tag and a `mermaid.initialize()` call in `<head>`
+
 ## Deployment (Netlify)
 
 - Connect repo to Netlify; publish directory: `/`

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resume Analyzer — Pawan Allem</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#6366f1',primaryTextColor:'#fff',primaryBorderColor:'#4f46e5',lineColor:'#6366f1',secondaryColor:'#1e293b',tertiaryColor:'#0f172a',clusterBkg:'#172033',clusterBorder:'#334155',nodeBorder:'#334155',mainBkg:'#1e293b',fontSize:'14px'}});</script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -190,33 +192,39 @@
   <section class="py-16 border-b border-white/5">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white mb-6">Architecture</h2>
-      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60 overflow-x-auto">
-        <pre class="text-sm text-slate-400 font-mono leading-relaxed">
-┌─────────────────────────────────────────────────────────┐
-│                     Upload Resume PDF                     │
-└────────────────────────┬────────────────────────────────┘
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Analysis Pipeline                      │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
-│  │ PDF      │─►│ Section  │─►│  LLM Analysis        │  │
-│  │ Parser   │  │ Extractor│  │  (strengths, gaps,   │  │
-│  └──────────┘  └──────────┘  │   ATS score, grammar)│  │
-│                              └──────────┬───────────┘  │
-│                                         ▼               │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │  Job Description Matcher (optional)                │   │
-│  │  → Skill gap analysis                             │   │
-│  │  → JD-resume comparison                           │   │
-│  │  → Keyword matching                               │   │
-│  └──────────────────────┬───────────────────────────┘   │
-│                         ▼                               │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │  Report Generator                                  │   │
-│  │  → Interactive web report                         │   │
-│  │  → PDF export (ReportLab / WeasyPrint)            │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘</pre>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+        <div class="mermaid">
+flowchart TD
+  UPLOAD["Upload Resume PDF"] --> PIPE["Analysis Pipeline"]
+  JD["Upload Job Description<br/>(optional)"] --> PIPE
+
+  subgraph PIPE["Analysis Pipeline"]
+    PDF["PDF Parser<br/>(PyMuPDF)"] --> SECT["Section Extractor<br/>(summary, experience, skills)"]
+    SECT --> LLM_ANALYSIS["LLM Analysis"]
+
+    subgraph LLM_ANALYSIS["LLM Analysis"]
+      STR["Strengths Detection"]
+      GAP["Skill Gap Analysis"]
+      ATS["ATS Scoring"]
+      GRAM["Grammar & Style"]
+      REWRITE["Bullet Point Rewrites"]
+    end
+
+    JD_MATCH["Job Description Matcher<br/>→ Skill gap<br/>→ Keyword match<br/>→ JD comparison"] --> RPT
+    LLM_ANALYSIS --> RPT["Report Generator"]
+  end
+
+  RPT --> WEB["Interactive Web Report"]
+  RPT --> PDF_EXPORT["PDF Export<br/>(WeasyPrint)"]
+
+  style UPLOAD fill:#6366f1,stroke:#4f46e5,color:#fff
+  style JD fill:#1e293b,stroke:#f59e0b,color:#e2e8f0
+  style PIPE fill:#0f172a,stroke:#334155,color:#94a3b8
+  style LLM_ANALYSIS fill:#172033,stroke:#6366f1,color:#94a3b8
+  style JD_MATCH fill:#172033,stroke:#10b981,color:#94a3b8
+  style WEB fill:#172033,stroke:#334155,color:#94a3b8
+  style PDF_EXPORT fill:#172033,stroke:#334155,color:#94a3b8
+</div>
       </div>
     </div>
   </section>
