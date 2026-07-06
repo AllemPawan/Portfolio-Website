@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL AI Assistant — Pawan Allem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+            surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#020617' },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'Fira Code', 'monospace'] },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .feature-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .feature-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.15); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-surface-950 text-slate-300 dark">
+
+  <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-lg border-b border-white/5" style="background: rgba(15, 23, 42, 0.85);">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Back to Portfolio
+        </a>
+        <a href="/" class="text-lg font-bold text-white tracking-tight">PA<span class="text-primary-400">.</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="pt-32 pb-16" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #172033 100%);">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-sm font-medium text-primary-400 bg-primary-500/10 px-3 py-1 rounded-full">Project</span>
+        <span class="text-sm text-slate-500">2026</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">SQL AI Assistant</h1>
+      <p class="text-lg sm:text-xl text-slate-400 leading-relaxed mb-6">Upload a SQLite database and query it in plain English. The AI generates, explains, and executes SQL — safely.</p>
+      <div class="flex flex-wrap gap-3 mb-8">
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Python</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">FastAPI</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Ollama</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">SQLite</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Docker</span>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a href="https://github.com/AllemPawan/sql-ai-assistant" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm transition-all shadow-lg shadow-primary-600/25">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Overview</h2>
+      <div class="text-slate-400 leading-relaxed space-y-4">
+        <p>The SQL AI Assistant lets anyone query a SQLite database using natural language. Upload a database, and the AI reads the schema, generates safe SELECT queries, executes them, and explains the results in plain English with auto-generated charts.</p>
+        <p>Built with FastAPI and Ollama, it prioritizes SQL safety — only SELECT queries are allowed, and the LLM is constrained to use only real tables and columns from the schema.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-8">Features</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-lg shrink-0">📤</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Database Upload</h3>
+              <p class="text-slate-400 text-sm">Upload any SQLite database. Schema is read automatically.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-lg shrink-0">💬</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Natural Language Queries</h3>
+              <p class="text-slate-400 text-sm">Ask questions in plain English — "Show top 10 customers", "Average sales by month".</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-lg shrink-0">🛡️</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">SQL Safety</h3>
+              <p class="text-slate-400 text-sm">Only SELECT queries allowed. DELETE, DROP, UPDATE, INSERT, ALTER, CREATE are rejected.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-lg shrink-0">📊</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Auto Charts</h3>
+              <p class="text-slate-400 text-sm">Bar, line, and pie charts auto-generated from numeric columns using Chart.js.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-lg shrink-0">📥</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Export Results</h3>
+              <p class="text-slate-400 text-sm">Export query results as CSV, Excel, or SQL.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-lg shrink-0">🧠</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">AI Explanation</h3>
+              <p class="text-slate-400 text-sm">After execution, the AI explains what the query did and the business meaning of results.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-lg shrink-0">💾</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Chat History</h3>
+              <p class="text-slate-400 text-sm">Conversation memory — previous questions influence future queries.</p>
+            </div>
+          </div>
+        </div>
+        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-teal-500/10 flex items-center justify-center text-lg shrink-0">🐳</div>
+            <div>
+              <h3 class="text-white font-semibold mb-1">Docker Support</h3>
+              <p class="text-slate-400 text-sm">One-command deployment with Docker Compose.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Architecture</h2>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60 overflow-x-auto">
+        <pre class="text-sm text-slate-400 font-mono leading-relaxed">
+┌─────────────────────────────────────────────────────────┐
+│                    Frontend (HTML + JS)                   │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
+│  │ Sidebar  │  │ Chat     │  │  Results Panel       │  │
+│  │ (DB info,│  │ Interface│  │  (table + charts)    │  │
+│  │  samples)│  │          │  │                      │  │
+│  └──────────┘  └──────────┘  └──────────────────────┘  │
+└──────────────────────┬──────────────────────────────────┘
+                       │ REST API
+┌──────────────────────▼──────────────────────────────────┐
+│                    FastAPI Backend                        │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐  │
+│  │ /upload  │  │ /query   │  │  /schema /tables     │  │
+│  │ -db      │  │          │  │  /export /history    │  │
+│  └────┬─────┘  └────┬─────┘  └──────────────────────┘  │
+│       │             │                                    │
+│  ┌────▼─────────────▼─────┐  ┌──────────────────────┐  │
+│  │   SQL Agent            │  │  LLM (Ollama)        │  │
+│  │   → Schema reader      │──┤  → SQL generation    │  │
+│  │   → Safety validator   │  │  → SQL explanation   │  │
+│  │   → Query executor     │  │  → Question context  │  │
+│  └────────────────────────┘  └──────────────────────┘  │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │  SQLite Database (uploaded)                       │   │
+│  └──────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────┘</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-6">API Endpoints</h2>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+        <pre class="text-sm text-slate-300 font-mono leading-relaxed overflow-x-auto">
+POST /api/upload-db    <span class="text-slate-600">Upload SQLite database file</span>
+GET  /api/schema       <span class="text-slate-600">Get database schema (tables, columns, types)</span>
+GET  /api/tables       <span class="text-slate-600">List table names and row counts</span>
+POST /api/query        <span class="text-slate-600">Ask a question — returns SQL, results, explanation</span>
+GET  /api/history      <span class="text-slate-600">Get conversation history</span>
+GET  /api/export/:fmt  <span class="text-slate-600">Export results as csv / excel / sql</span>
+GET  /api/health       <span class="text-slate-600">Health check</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Project Structure</h2>
+      <div class="p-5 rounded-xl bg-surface-900 border border-slate-800/60">
+        <pre class="text-xs text-slate-400 font-mono leading-relaxed">
+sql-ai-assistant/
+├── backend/
+│   ├── api.py          # FastAPI routes
+│   ├── database.py     # SQLite operations
+│   ├── llm.py          # Ollama client
+│   ├── sql_agent.py    # SQL generation + safety
+│   ├── prompt.py       # Prompt templates
+│   ├── models.py       # Pydantic models
+│   └── utils.py        # Utilities
+├── frontend/
+│   ├── index.html      # Dashboard
+│   └── app.js          # Frontend logic
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .env.example
+└── README.md</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-b border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Getting Started</h2>
+      <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+        <pre class="text-sm text-slate-300 font-mono leading-relaxed overflow-x-auto">
+<span class="text-slate-600"># Clone & run</span>
+git clone https://github.com/AllemPawan/sql-ai-assistant.git
+cd sql-ai-assistant
+
+<span class="text-slate-600"># Configure environment</span>
+cp .env.example .env
+<span class="text-slate-600"># Edit .env with your Ollama endpoint</span>
+
+<span class="text-slate-600"># Run with Docker</span>
+docker compose up -d
+
+<span class="text-slate-600"># Open http://localhost:8000</span>
+<span class="text-slate-600"># Upload a .db file and start asking questions!</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <a href="/" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm font-medium">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-slate-600 text-sm">© 2026 Pawan Allem</p>
+    </div>
+  </footer>
+
+</body>
+</html>

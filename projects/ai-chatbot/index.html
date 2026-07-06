@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot — Pawan Allem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+            surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#020617' },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'Fira Code', 'monospace'] },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .msg-content p { margin-bottom: 0.5rem; }
+    .msg-content p:last-child { margin-bottom: 0; }
+    .msg-content ul, .msg-content ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+    .msg-content li { margin-bottom: 0.25rem; }
+    .msg-content h1, .msg-content h2, .msg-content h3, .msg-content h4 { margin-top: 1rem; margin-bottom: 0.5rem; font-weight: 600; }
+    .msg-content code:not(pre code) { background: #1e293b; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875em; font-family: 'JetBrains Mono', monospace; }
+    .msg-content pre { margin: 0.75rem 0; border-radius: 0.5rem; overflow: hidden; position: relative; }
+    .msg-content pre code { display: block; padding: 1rem; overflow-x: auto; font-size: 0.8125rem; line-height: 1.5; background: #1e293b; }
+    .msg-content table { border-collapse: collapse; margin: 0.75rem 0; width: 100%; }
+    .msg-content th, .msg-content td { border: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+    .msg-content th { background: #1e293b; font-weight: 600; }
+    .msg-content blockquote { border-left: 3px solid #6366f1; padding-left: 1rem; margin: 0.75rem 0; color: #94a3b8; }
+    .msg-content a { color: #818cf8; text-decoration: underline; }
+    .msg-content a:hover { color: #a5b4fc; }
+    @keyframes pulse-dot { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
+    .pulse-dot { animation: pulse-dot 1.4s infinite; }
+    .pulse-dot:nth-child(2) { animation-delay: 0.2s; }
+    .pulse-dot:nth-child(3) { animation-delay: 0.4s; }
+    .copy-btn { opacity: 0; transition: opacity 0.2s; }
+    .msg-group:hover .copy-btn { opacity: 1; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .msg-animate { animation: slideUp 0.2s ease-out; }
+    .modal-overlay { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(4px); }
+  </style>
+</head>
+<body class="bg-surface-950 text-slate-300 dark h-screen flex flex-col overflow-hidden">
+
+  <!-- Nav -->
+  <nav class="shrink-0 backdrop-blur-lg border-b border-white/5" style="background: rgba(15, 23, 42, 0.85);">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Portfolio
+        </a>
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-medium text-white">AI Chatbot</span>
+          <span class="hidden sm:inline text-xs text-slate-500">— Ollama · Qwen</span>
+        </div>
+        <button id="settings-btn" class="text-slate-500 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-surface-800" title="Settings">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+    <div class="bg-surface-900 border border-slate-700/60 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold text-white">Settings</h2>
+        <button id="settings-close" class="text-slate-500 hover:text-white transition-colors p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="endpoint-input" class="block text-sm font-medium text-slate-400 mb-1.5">Ollama API Endpoint</label>
+          <input id="endpoint-input" type="url" class="w-full px-3 py-2 rounded-lg bg-surface-800 border border-slate-700/60 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" placeholder="https://your-ngrok-url.ngrok-free.dev" />
+          <p class="text-xs text-slate-500 mt-1">The base URL of your Ollama server (no trailing slash).</p>
+        </div>
+
+        <div>
+          <label for="header-input" class="block text-sm font-medium text-slate-400 mb-1.5">Custom Header (optional)</label>
+          <div class="flex gap-2">
+            <input id="header-name" type="text" class="flex-1 w-1/3 px-3 py-2 rounded-lg bg-surface-800 border border-slate-700/60 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-primary-500 transition-colors" placeholder="Header name" />
+            <input id="header-value" type="text" class="flex-1 px-3 py-2 rounded-lg bg-surface-800 border border-slate-700/60 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-primary-500 transition-colors" placeholder="Header value" />
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Set if your endpoint requires a bypass header (e.g. <code class="text-slate-400">ngrok-skip-browser-warning</code>).</p>
+        </div>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button id="test-conn-btn" class="px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium transition-colors disabled:opacity-50">
+            Test Connection
+          </button>
+          <span id="conn-status" class="text-xs text-slate-500"></span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-800">
+        <button id="settings-cancel" class="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white transition-colors">Cancel</button>
+        <button id="settings-save" class="px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium transition-colors">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Chat -->
+  <div class="flex-1 flex flex-col min-h-0 max-w-5xl mx-auto w-full px-4 sm:px-6">
+    <div id="chat-messages" class="flex-1 overflow-y-auto py-6 space-y-4">
+      <div class="flex items-start gap-3 msg-animate">
+        <div class="w-8 h-8 rounded-lg bg-primary-500/15 flex items-center justify-center text-sm shrink-0 mt-0.5">🤖</div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-medium text-white">Assistant</span>
+            <span class="text-xs text-slate-500">ready</span>
+          </div>
+          <div class="msg-content text-sm text-slate-300 leading-relaxed">
+            <p>Hi! I'm running on <strong>Qwen 3 (8B)</strong> via Ollama. I can help with coding, analysis, writing, and more. Try me!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error-banner" class="hidden shrink-0 mx-2 mb-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span id="error-text" class="flex-1 text-xs leading-relaxed">Something went wrong.</span>
+      <button onclick="dismissError()" class="text-red-400 hover:text-red-300 shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="shrink-0 py-3 border-t border-white/5">
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <select id="model-select" class="text-xs bg-surface-800 border border-slate-700/60 rounded-lg px-2 py-1.5 text-slate-300 focus:outline-none focus:border-primary-500">
+          <option value="qwen3:8b">Qwen 3 (8B)</option>
+          <option value="qwen2.5:3b">Qwen 2.5 (3B)</option>
+        </select>
+
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <span title="Temperature">🌡️</span>
+          <input id="temp-slider" type="range" min="0" max="2" step="0.1" value="0.7" class="w-16 h-1 accent-primary-500 cursor-pointer" />
+          <span id="temp-value" class="w-6 text-slate-400">0.7</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <span title="Max tokens">📏</span>
+          <input id="tokens-slider" type="range" min="128" max="8192" step="128" value="2048" class="w-16 h-1 accent-primary-500 cursor-pointer" />
+          <span id="tokens-value" class="w-8 text-slate-400">2K</span>
+        </div>
+
+        <div class="flex-1"></div>
+
+        <button id="export-btn" title="Export chat as Markdown" class="text-xs text-slate-500 hover:text-slate-300 transition-colors px-2 py-1.5 rounded-lg hover:bg-surface-800">
+          📥 Export
+        </button>
+        <button id="clear-btn" title="Clear conversation" class="text-xs text-slate-500 hover:text-red-400 transition-colors px-2 py-1.5 rounded-lg hover:bg-surface-800">
+          🗑️ Clear
+        </button>
+      </div>
+
+      <div class="flex gap-2">
+        <textarea id="chat-input" rows="1" placeholder="Type a message..." class="flex-1 resize-none bg-surface-900 border border-slate-700/60 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors max-h-32"></textarea>
+        <button id="send-btn" class="shrink-0 w-11 h-11 rounded-xl bg-primary-600 hover:bg-primary-500 disabled:bg-surface-800 disabled:text-slate-600 text-white flex items-center justify-center transition-all shadow-lg shadow-primary-600/25 disabled:shadow-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0l-7 7m7-7l7 7"/></svg>
+        </button>
+      </div>
+      <p id="endpoint-display" class="text-[10px] text-slate-600 mt-1.5 text-center"></p>
+    </div>
+  </div>
+
+  <script>
+    // ─── Config (load from localStorage or defaults) ─────────────────────
+    const STORAGE_KEY = 'ai-chatbot-config';
+
+    function loadConfig() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (_) { /* ignore */ }
+      return {
+        endpoint: 'https://peso-clubhouse-refuse.ngrok-free.dev',
+        headerName: 'ngrok-skip-browser-warning',
+        headerValue: 'true',
+      };
+    }
+
+    function saveConfig(cfg) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+    }
+
+    let config = loadConfig();
+
+    function getEndpoint() {
+      return config.endpoint.replace(/\/+$/, '');
+    }
+
+    function getCustomHeaders() {
+      const h = {};
+      if (config.headerName && config.headerValue) {
+        h[config.headerName] = config.headerValue;
+      }
+      return h;
+    }
+
+    // ─── State ───────────────────────────────────────────────────────────
+    let messages = [];
+    let isStreaming = false;
+    let abortController = null;
+
+    // ─── DOM refs ────────────────────────────────────────────────────────
+    const chatEl = document.getElementById('chat-messages');
+    const inputEl = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const modelSelect = document.getElementById('model-select');
+    const tempSlider = document.getElementById('temp-slider');
+    const tempValue = document.getElementById('temp-value');
+    const tokensSlider = document.getElementById('tokens-slider');
+    const tokensValue = document.getElementById('tokens-value');
+    const errorBanner = document.getElementById('error-banner');
+    const errorText = document.getElementById('error-text');
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsClose = document.getElementById('settings-close');
+    const settingsCancel = document.getElementById('settings-cancel');
+    const settingsSave = document.getElementById('settings-save');
+    const endpointInput = document.getElementById('endpoint-input');
+    const headerNameInput = document.getElementById('header-name');
+    const headerValueInput = document.getElementById('header-value');
+    const testConnBtn = document.getElementById('test-conn-btn');
+    const connStatus = document.getElementById('conn-status');
+    const endpointDisplay = document.getElementById('endpoint-display');
+
+    // ─── Logging ─────────────────────────────────────────────────────────
+    function log(level, msg, data) {
+      const prefix = `[Chatbot][${new Date().toISOString()}]`;
+      if (data) console[level](prefix, msg, data);
+      else console[level](prefix, msg);
+    }
+
+    // ─── Error handling ──────────────────────────────────────────────────
+    function showError(msg) {
+      errorText.innerHTML = msg;
+      errorBanner.classList.remove('hidden');
+      log('error', msg.replace(/<br\s*\/?>/g, ' '));
+    }
+
+    function dismissError() {
+      errorBanner.classList.add('hidden');
+    }
+    window.dismissError = dismissError;
+
+    // ─── UI helpers ──────────────────────────────────────────────────────
+    function updateEndpointDisplay() {
+      const url = getEndpoint();
+      const host = url.replace(/^https?:\/\//, '');
+      endpointDisplay.textContent = `Responses streamed from ${host}`;
+    }
+
+    // ─── Auto-resize textarea ────────────────────────────────────────────
+    inputEl.addEventListener('input', () => {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 128) + 'px';
+    });
+
+    // ─── Sliders ─────────────────────────────────────────────────────────
+    tempSlider.addEventListener('input', () => {
+      tempValue.textContent = parseFloat(tempSlider.value).toFixed(1);
+    });
+    tokensSlider.addEventListener('input', () => {
+      const v = parseInt(tokensSlider.value);
+      tokensValue.textContent = v >= 1000 ? Math.round(v / 1000) + 'K' : v.toString();
+    });
+
+    // ─── Render markdown ────────────────────────────────────────────────
+    function renderMarkdown(text) {
+      if (!text) return '';
+      try {
+        return marked.parse(text, { breaks: true, gfm: true });
+      } catch (e) {
+        log('warn', 'Markdown parse failed', e);
+        return text.replace(/\n/g, '<br>');
+      }
+    }
+
+    function highlightCodeBlocks(container) {
+      container.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+        const pre = block.parentElement;
+        const lang = block.className.replace(/^.*language-(\S+).*$/, '$1');
+        if (pre && pre.parentElement) {
+          const header = document.createElement('div');
+          header.className = 'flex items-center justify-between px-4 py-1.5 bg-surface-800 text-xs text-slate-500';
+          header.innerHTML = `<span>${lang !== block.className ? lang : 'code'}</span>
+            <button class="hover:text-slate-300 transition-colors" onclick="copyText(this, \`${encodeURIComponent(block.textContent)}\`)">Copy</button>`;
+          pre.insertBefore(header, block);
+        }
+      });
+    }
+
+    // ─── Copy ───────────────────────────────────────────────────────────
+    function copyText(btn, text) {
+      const decoded = decodeURIComponent(text);
+      navigator.clipboard.writeText(decoded).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      }).catch(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Failed';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    }
+    window.copyText = copyText;
+
+    function copyFullResponse(btn, text) {
+      const decoded = decodeURIComponent(text);
+      navigator.clipboard.writeText(decoded).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        setTimeout(() => btn.innerHTML = orig, 1500);
+      });
+    }
+    window.copyFullResponse = copyFullResponse;
+
+    // ─── Add message to UI ──────────────────────────────────────────────
+    function addMessageUI(role, content) {
+      const isUser = role === 'user';
+      const div = document.createElement('div');
+      div.className = 'flex items-start gap-3 msg-animate';
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-lg ${isUser ? 'bg-primary-500/15' : 'bg-purple-500/15'} flex items-center justify-center text-sm shrink-0 mt-0.5">${isUser ? '👤' : '🤖'}</div>
+        <div class="min-w-0 flex-1 msg-group">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-medium text-white">${isUser ? 'You' : 'Assistant'}</span>
+            ${isUser ? '' : `<button class="copy-btn ml-auto text-slate-500 hover:text-slate-300 transition-colors" onclick="copyFullResponse(this, '${encodeURIComponent(content)}')" title="Copy response">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </button>`}
+          </div>
+          <div class="msg-content text-sm text-slate-300 leading-relaxed">${renderMarkdown(content)}</div>
+        </div>
+      `;
+      chatEl.appendChild(div);
+      if (!isUser) highlightCodeBlocks(div);
+      scrollToBottom();
+      return div;
+    }
+
+    function addStreamingMessageUI() {
+      const div = document.createElement('div');
+      div.className = 'flex items-start gap-3 msg-animate';
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center text-sm shrink-0 mt-0.5">🤖</div>
+        <div class="min-w-0 flex-1 msg-group">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-medium text-white">Assistant</span>
+            <span class="text-xs text-slate-500 streaming-label">streaming</span>
+            <button class="copy-btn ml-auto text-slate-500 hover:text-slate-300 transition-colors" onclick="copyFullResponse(this, '')" title="Copy response" style="display:none">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </button>
+          </div>
+          <div class="msg-content text-sm text-slate-300 leading-relaxed">
+            <span class="inline-flex gap-0.5">
+              <span class="pulse-dot">●</span><span class="pulse-dot">●</span><span class="pulse-dot">●</span>
+            </span>
+          </div>
+        </div>
+      `;
+      chatEl.appendChild(div);
+      scrollToBottom();
+      return div;
+    }
+
+    function updateStreamingContent(div, text) {
+      const contentEl = div.querySelector('.msg-content');
+      if (!contentEl) return;
+      contentEl.innerHTML = renderMarkdown(text);
+      highlightCodeBlocks(contentEl);
+      scrollToBottom();
+    }
+
+    function finalizeStreamingMessage(div, text) {
+      const label = div.querySelector('.streaming-label');
+      if (label) label.textContent = 'done';
+      const copyBtn = div.querySelector('.copy-btn');
+      if (copyBtn) {
+        copyBtn.style.display = '';
+        copyBtn.setAttribute('onclick', `copyFullResponse(this, '${encodeURIComponent(text)}')`);
+      }
+      const contentEl = div.querySelector('.msg-content');
+      if (contentEl) {
+        contentEl.innerHTML = renderMarkdown(text);
+        highlightCodeBlocks(contentEl);
+      }
+    }
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => { chatEl.scrollTop = chatEl.scrollHeight; });
+    }
+
+    // ─── Ollama – fetch available models ─────────────────────────────────
+    async function fetchModels() {
+      const url = `${getEndpoint()}/api/tags`;
+      const headers = { ...getCustomHeaders() };
+      const res = await fetch(url, { headers });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      return (data.models || []).map(m => ({ name: m.name, label: `${m.name} (${(m.details?.parameter_size || '?')})` }));
+    }
+
+    // ─── Ollama – stream chat ────────────────────────────────────────────
+    async function streamChat(model, msgs, temperature, maxTokens) {
+      const body = JSON.stringify({
+        model,
+        messages: msgs,
+        stream: true,
+        options: {
+          temperature: parseFloat(temperature),
+          num_predict: parseInt(maxTokens)
+        }
+      });
+
+      log('info', `Sending request to ${getEndpoint()}/api/chat`, { model, temperature, maxTokens, messageCount: msgs.length });
+
+      abortController = new AbortController();
+      const headers = {
+        'Content-Type': 'application/json',
+        ...getCustomHeaders()
+      };
+
+      const response = await fetch(`${getEndpoint()}/api/chat`, {
+        method: 'POST',
+        headers,
+        body,
+        signal: abortController.signal
+      });
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => 'Unknown error');
+        throw new Error(`API error ${response.status}: ${errText.slice(0, 200)}`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = '';
+      let buffer = '';
+
+      const streamDiv = addStreamingMessageUI();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const chunk = JSON.parse(line);
+            if (chunk.message && chunk.message.content) {
+              fullContent += chunk.message.content;
+              updateStreamingContent(streamDiv, fullContent);
+            }
+            if (chunk.message && chunk.message.thinking) {
+              fullContent += '\n> ' + chunk.message.thinking;
+              updateStreamingContent(streamDiv, fullContent);
+            }
+          } catch (e) {
+            log('warn', 'Failed to parse stream chunk', { line, error: e.message });
+          }
+        }
+      }
+
+      if (buffer.trim()) {
+        try {
+          const chunk = JSON.parse(buffer);
+          if (chunk.message && chunk.message.content) {
+            fullContent += chunk.message.content;
+          }
+        } catch (_) {}
+      }
+
+      finalizeStreamingMessage(streamDiv, fullContent);
+      abortController = null;
+      return fullContent;
+    }
+
+    // ─── Get helpful error guidance ──────────────────────────────────────
+    function getFetchGuidance(err) {
+      const msg = err.message || '';
+      const isFileProtocol = window.location.protocol === 'file:';
+      const lines = [];
+
+      if (isFileProtocol) {
+        lines.push('You are opening this page directly from the file system (<code>file://</code>).');
+        lines.push('Browsers block CORS requests from <code>file://</code> origins.');
+        lines.push('Serve the page with a local HTTP server instead:');
+        lines.push('&nbsp;&nbsp;<code>python -m http.server 8000</code> or <code>npx serve .</code>');
+        return lines.join('<br>');
+      }
+
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('TypeError')) {
+        lines.push('Could not reach the Ollama API server.');
+        lines.push('Possible causes:');
+        lines.push('• The server is not running — start Ollama on your machine');
+        lines.push('• The ngrok tunnel has expired — restart ngrok and update the endpoint in ⚙️ Settings');
+        lines.push('• CORS is blocked — start Ollama with <code>OLLAMA_ORIGINS=*</code> environment variable');
+        lines.push('• You are on a restricted network — try a different network or VPN');
+        lines.push('');
+        lines.push('Quick test: open <a href="' + getEndpoint() + '/api/tags" target="_blank" class="underline">' + getEndpoint() + '/api/tags</a> in your browser — if you see JSON, the server is up.');
+        return lines.join('<br>');
+      }
+
+      return msg;
+    }
+
+    // ─── Send message ────────────────────────────────────────────────────
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text || isStreaming) return;
+
+      dismissError();
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      sendBtn.disabled = true;
+
+      messages.push({ role: 'user', content: text });
+      addMessageUI('user', text);
+
+      isStreaming = true;
+      let assistantContent = '';
+
+      try {
+        assistantContent = await streamChat(
+          modelSelect.value,
+          messages,
+          tempSlider.value,
+          tokensSlider.value
+        );
+        messages.push({ role: 'assistant', content: assistantContent });
+        log('info', 'Response complete', { tokens: assistantContent.length });
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          log('info', 'Stream aborted by user');
+          showError('Generation cancelled.');
+        } else {
+          log('error', 'Stream failed', { error: err.message });
+          showError(getFetchGuidance(err));
+        }
+      } finally {
+        isStreaming = false;
+        sendBtn.disabled = false;
+        abortController = null;
+        inputEl.focus();
+      }
+    }
+
+    // ─── Events: send ────────────────────────────────────────────────────
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    // ─── Events: clear ───────────────────────────────────────────────────
+    clearBtn.addEventListener('click', () => {
+      if (isStreaming && abortController) abortController.abort();
+      messages = [];
+      chatEl.innerHTML = `
+        <div class="flex items-start gap-3 msg-animate">
+          <div class="w-8 h-8 rounded-lg bg-primary-500/15 flex items-center justify-center text-sm shrink-0 mt-0.5">🤖</div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-sm font-medium text-white">Assistant</span>
+              <span class="text-xs text-slate-500">ready</span>
+            </div>
+            <div class="msg-content text-sm text-slate-300 leading-relaxed">
+              <p>Conversation cleared. Start a new topic!</p>
+            </div>
+          </div>
+        </div>`;
+      dismissError();
+      log('info', 'Conversation cleared');
+    });
+
+    // ─── Events: export ──────────────────────────────────────────────────
+    exportBtn.addEventListener('click', () => {
+      if (messages.length === 0) { showError('No messages to export.'); return; }
+      let md = `# AI Chatbot — Export\n\n*Exported on ${new Date().toLocaleString()}*\n\n---\n\n`;
+      for (const msg of messages) {
+        const role = msg.role === 'user' ? '**You**' : '**Assistant**';
+        md += `${role}:\n${msg.content}\n\n---\n\n`;
+      }
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `chat-export-${Date.now()}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+      log('info', 'Chat exported', { messages: messages.length });
+    });
+
+    // ─── Settings modal ──────────────────────────────────────────────────
+    function openSettings() {
+      endpointInput.value = getEndpoint();
+      headerNameInput.value = config.headerName || '';
+      headerValueInput.value = config.headerValue || '';
+      connStatus.textContent = '';
+      settingsModal.classList.remove('hidden');
+    }
+
+    function closeSettings() {
+      settingsModal.classList.add('hidden');
+    }
+
+    settingsBtn.addEventListener('click', openSettings);
+    settingsClose.addEventListener('click', closeSettings);
+    settingsCancel.addEventListener('click', closeSettings);
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) closeSettings();
+    });
+
+    settingsSave.addEventListener('click', () => {
+      config.endpoint = endpointInput.value.trim().replace(/\/+$/, '');
+      config.headerName = headerNameInput.value.trim();
+      config.headerValue = headerValueInput.value.trim();
+      saveConfig(config);
+      updateEndpointDisplay();
+      log('info', 'Config saved', { endpoint: config.endpoint });
+      closeSettings();
+    });
+
+    // ─── Test connection ─────────────────────────────────────────────────
+    testConnBtn.addEventListener('click', async () => {
+      const url = endpointInput.value.trim().replace(/\/+$/, '');
+      const hName = headerNameInput.value.trim();
+      const hValue = headerValueInput.value.trim();
+      const headers = {};
+      if (hName && hValue) headers[hName] = hValue;
+
+      testConnBtn.disabled = true;
+      connStatus.textContent = 'Testing...';
+      connStatus.className = 'text-xs text-slate-400';
+
+      try {
+        const res = await fetch(`${url}/api/tags`, { headers });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const models = (data.models || []).map(m => m.name).join(', ');
+        connStatus.textContent = `✅ Connected — models: ${models || 'none found'}`;
+        connStatus.className = 'text-xs text-emerald-400';
+        log('info', 'Connection test succeeded', { url, models });
+      } catch (err) {
+        connStatus.textContent = `❌ ${err.message}`;
+        connStatus.className = 'text-xs text-red-400';
+        log('error', 'Connection test failed', { url, error: err.message });
+      } finally {
+        testConnBtn.disabled = false;
+      }
+    });
+
+    // ─── Reload models list (after settings change) ──────────────────────
+    async function refreshModelList() {
+      try {
+        const models = await fetchModels();
+        if (models.length > 0) {
+          const current = modelSelect.value;
+          modelSelect.innerHTML = models.map(m =>
+            `<option value="${m.name}" ${m.name === current ? 'selected' : ''}>${m.label}</option>`
+          ).join('');
+          log('info', 'Models refreshed', { count: models.length });
+        }
+      } catch (_) {
+        // silent — user will see error when they try to chat
+      }
+    }
+
+    // ─── Keyboard shortcut ──────────────────────────────────────────────
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isStreaming && abortController) {
+        abortController.abort();
+        log('info', 'Stream aborted via Escape');
+      }
+    });
+
+    // ─── Init ────────────────────────────────────────────────────────────
+    updateEndpointDisplay();
+    refreshModelList();
+    log('info', 'Chatbot initialized', { endpoint: getEndpoint(), model: modelSelect.value });
+  </script>
+</body>
+</html>
