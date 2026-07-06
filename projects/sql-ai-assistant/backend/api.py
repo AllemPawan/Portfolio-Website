@@ -9,6 +9,7 @@ from typing import Any
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, FileResponse
+from fastapi.staticfiles import StaticFiles
 
 import database
 import sql_agent
@@ -31,6 +32,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve frontend static files as fallback
+_frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.isdir(_frontend_dir):
+    app.mount("/", StaticFiles(directory=_frontend_dir, html=True), name="frontend")
 
 history: list[dict[str, Any]] = []
 current_db_name: str | None = None

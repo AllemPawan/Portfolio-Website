@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  sql-ai-assistant:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=qwen3:8b
+    volumes:
+      - ./uploads:/app/backend/uploads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
