@@ -63,10 +63,19 @@ docker compose up -d
 │   ├── resume-analyzer/        # AI resume analysis
 │   ├── ocr-reader/             # Image text extraction
 │   ├── sentiment-analysis/     # Text sentiment classification
-│   └── sql-ai-assistant/       # SQL AI Assistant (FastAPI + SQLite + Ollama)
+│   ├── sql-ai-assistant/       # SQL AI Assistant (FastAPI + SQLite + Ollama)
+│   │   ├── index.html          # Project description page
+│   │   ├── backend/            # FastAPI backend
+│   │   ├── frontend/           # Dashboard HTML + JS
+│   │   ├── Dockerfile
+│   │   ├── docker-compose.yml
+│   │   ├── requirements.txt
+│   │   ├── .env.example
+│   │   └── README.md
+│   └── automated-ml-pipeline/  # AutoML Pipeline (FastAPI + scikit-learn + Vue.js)
 │       ├── index.html          # Project description page
-│       ├── backend/            # FastAPI backend
-│       ├── frontend/           # Dashboard HTML + JS
+│       ├── backend/            # FastAPI backend (api, eda, trainer, feature_engineering, utils)
+│       ├── frontend/           # Dashboard HTML + Vue.js app
 │       ├── Dockerfile
 │       ├── docker-compose.yml
 │       ├── requirements.txt

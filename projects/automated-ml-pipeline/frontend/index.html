@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoML Pipeline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+            surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#020617' },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'Fira Code', 'monospace'] },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #020617; color: #cbd5e1; min-height: 100vh; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; }
+    .btn { padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: #4f46e5; color: white; }
+    .btn-primary:hover { background: #6366f1; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #ef4444; }
+    .tab { padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
+    .tab.active { background: #4f46e5; color: white; }
+    .tab:not(.active) { color: #94a3b8; }
+    .tab:not(.active):hover { color: #e2e8f0; background: #1e293b; }
+    .drop-zone { border: 2px dashed #334155; border-radius: 12px; padding: 3rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: #6366f1; background: rgba(99,102,241,0.05); }
+    .metric-card { background: #172033; border: 1px solid #1e293b; border-radius: 10px; padding: 1rem; text-align: center; }
+    .metric-value { font-size: 1.75rem; font-weight: 700; color: #e2e8f0; }
+    .metric-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+    .model-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; cursor: pointer; transition: background 0.2s; }
+    .model-row:hover { background: #1e293b; }
+    .model-row:last-child { border-bottom: none; }
+    .badge { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #10b981; }
+    .badge-blue { background: rgba(99,102,241,0.15); color: #818cf8; }
+    .badge-amber { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .spinner { width: 20px; height: 20px; border: 2px solid #334155; border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    [v-cloak] { display: none; }
+    .highlight { background: rgba(99,102,241,0.1); border-color: #4f46e5; }
+    input, select { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.5rem 0.75rem; color: #e2e8f0; font-size: 0.875rem; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+    label { display: block; font-size: 0.8rem; font-weight: 500; color: #94a3b8; margin-bottom: 0.375rem; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .checkbox-item { display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; background: #1e293b; border: 1px solid #334155; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+    .checkbox-item.selected { background: rgba(99,102,241,0.15); border-color: #6366f1; color: #a5b4fc; }
+    .checkbox-item input { display: none; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: 0.75rem 1.25rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; z-index: 100; animation: slideIn 0.3s ease; }
+    .toast-success { background: #065f46; color: #6ee7b7; border: 1px solid #059669; }
+    .toast-error { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+  <nav style="background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0 1.5rem; position: fixed; inset: 0 0 auto 0; z-index: 50; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="font-size: 1.25rem; font-weight: 700; color: white;">Auto<span style="color: #818cf8;">ML</span></span>
+      <span style="color: #475569; font-size: 0.75rem;">|</span>
+      <span style="color: #64748b; font-size: 0.8rem;">Automated ML Pipeline</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <button class="btn btn-secondary" @click="view = 'upload'" :class="{highlight: view === 'upload'}">Upload</button>
+      <button class="btn btn-secondary" @click="view = 'sessions'" :class="{highlight: view === 'sessions'}">
+        Sessions <span v-if="sessions.length" style="margin-left:0.375rem; background:#4f46e5; color:white; border-radius:999px; padding:0.0625rem 0.375rem; font-size:0.7rem;">{{sessions.length}}</span>
+      </button>
+    </div>
+  </nav>
+
+  <main style="padding-top: 80px; max-width: 1200px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: 4rem;">
+
+    <!-- Upload View -->
+    <div v-if="view === 'upload'">
+      <div style="text-align: center; margin-bottom: 2rem;" v-if="!currentSession">
+        <h1 style="font-size: 2rem; font-weight: 800; color: white; margin-bottom: 0.5rem;">Automated ML Pipeline</h1>
+        <p style="color: #64748b;">Upload a CSV. Get instant EDA, train multiple models, compare results, and download the best one.</p>
+      </div>
+
+      <div class="drop-zone" v-if="!currentSession" @click="$refs.fileInput.click()" @dragover.prevent="$event.target.classList.add('dragover')" @dragleave.prevent="$event.target.classList.remove('dragover')" @drop.prevent="handleDrop">
+        <div style="font-size: 3rem; margin-bottom: 0.75rem;">📊</div>
+        <p style="color: #94a3b8; font-size: 1rem; margin-bottom: 0.5rem;"><strong style="color:#e2e8f0;">Click to upload</strong> or drag and drop</p>
+        <p style="color: #64748b; font-size: 0.8rem;">CSV files only, any size</p>
+        <input type="file" ref="fileInput" accept=".csv" style="display:none" @change="handleUpload" />
+      </div>
+
+      <div v-if="loading" style="text-align: center; padding: 2rem;">
+        <div class="spinner" style="width: 40px; height: 40px; border-width: 3px; margin: 0 auto 1rem;"></div>
+        <p style="color: #94a3b8;">{{loadingMessage}}</p>
+      </div>
+
+      <!-- EDA Dashboard -->
+      <div v-if="currentSession && eda && !loading">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: white;">EDA: {{currentSession.filename}}</h2>
+            <p style="color: #64748b; font-size: 0.8rem;">{{eda.overview.shape.rows.toLocaleString()}} rows × {{eda.overview.shape.columns}} columns | Session: {{currentSession.id}}</p>
+          </div>
+          <button class="btn btn-danger" @click="deleteSession" style="font-size:0.75rem;">Delete</button>
+        </div>
+
+        <!-- EDA Tabs -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <div class="tab" :class="{active: edaTab === 'overview'}" @click="edaTab = 'overview'">Overview</div>
+          <div class="tab" :class="{active: edaTab === 'columns'}" @click="edaTab = 'columns'">Columns</div>
+          <div class="tab" :class="{active: edaTab === 'distributions'}" @click="edaTab = 'distributions'">Distributions</div>
+          <div class="tab" :class="{active: edaTab === 'correlations'}" @click="edaTab = 'correlations'">Correlations</div>
+          <div class="tab" :class="{active: edaTab === 'missing'}" @click="edaTab = 'missing'">Missing Values</div>
+          <div class="tab" :class="{active: edaTab === 'train'}" @click="edaTab = 'train'">Train Models</div>
+        </div>
+
+        <!-- Overview Tab -->
+        <div v-if="edaTab === 'overview'">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric-card"><div class="metric-value">{{eda.overview.shape.rows.toLocaleString()}}</div><div class="metric-label">Rows</div></div>
+            <div class="metric-card"><div class="metric-value">{{eda.overview.shape.columns}}</div><div class="metric-label">Columns</div></div>
+            <div class="metric-card"><div class="metric-value">{{missingCount}}</div><div class="metric-label">Missing Cells</div></div>
+            <div class="metric-card"><div class="metric-value">{{numericCount}}</div><div class="metric-label">Numeric Columns</div></div>
+            <div class="metric-card"><div class="metric-value">{{categoricalCount}}</div><div class="metric-label">Categorical Columns</div></div>
+          </div>
+          <div class="card">
+            <h3 style="color: #e2e8f0; font-weight: 600; margin-bottom: 0.75rem;">Column Summary</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; font-size: 0.8rem; border-collapse: collapse;">
+                <thead><tr style="border-bottom: 1px solid #1e293b;">
+                  <th style="text-align: left; padding: 0.5rem; color: #94a3b8;">Column</th>
+                  <th style="text-align: left; padding: 0.5rem; color: #94a3b8;">Type</th>
+                  <th style="text-align: right; padding: 0.5rem; color: #94a3b8;">Unique</th>
+                  <th style="text-align: right; padding: 0.5rem; color: #94a3b8;">Missing</th>
+                  <th style="text-align: right; padding: 0.5rem; color: #94a3b8;">Missing %</th>
+                </tr></thead>
+                <tbody>
+                  <tr v-for="col in eda.overview.columns" :key="col" style="border-bottom: 1px solid #1e293b;">
+                    <td style="padding: 0.5rem; color: #e2e8f0;">{{col}}</td>
+                    <td style="padding: 0.5rem;"><span class="badge" :class="eda.overview.dtypes[col].includes('float') || eda.overview.dtypes[col].includes('int') ? 'badge-blue' : 'badge-green'">{{eda.overview.dtypes[col]}}</span></td>
+                    <td style="padding: 0.5rem; text-align: right;">{{eda.overview.unique_counts[col]}}</td>
+                    <td style="padding: 0.5rem; text-align: right;">{{eda.overview.missing[col]}}</td>
+                    <td style="padding: 0.5rem; text-align: right;">{{eda.overview.missing_pct[col]}}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columns Tab -->
+        <div v-if="edaTab === 'columns'">
+          <div class="card">
+            <h3 style="color: #e2e8f0; font-weight: 600; margin-bottom: 0.75rem;">Detailed Statistics</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; font-size: 0.8rem; border-collapse: collapse;">
+                <thead><tr style="border-bottom: 1px solid #1e293b;">
+                  <th style="text-align: left; padding: 0.5rem; color: #94a3b8;">Statistic</th>
+                  <th v-for="col in numericColumns" :key="col" style="text-align: right; padding: 0.5rem; color: #94a3b8;">{{col}}</th>
+                </tr></thead>
+                <tbody>
+                  <tr v-for="stat in ['count','mean','std','min','25%','50%','75%','max']" :key="stat" style="border-bottom: 1px solid #1e293b;">
+                    <td style="padding: 0.5rem; color: #94a3b8; font-weight: 500;">{{stat}}</td>
+                    <td v-for="col in numericColumns" :key="col" style="padding: 0.5rem; text-align: right; color: #e2e8f0;">
+                      {{formatStat(eda.overview.describe[col]?.[stat])}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Distributions Tab -->
+        <div v-if="edaTab === 'distributions'">
+          <div v-if="Object.keys(eda.distributions).length === 0" class="card" style="text-align:center; color: #64748b;">
+            No numeric columns to visualize.
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1rem;">
+            <div v-for="(img, col) in eda.distributions" :key="col" class="card" style="padding: 0.75rem;">
+              <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">{{col}}</p>
+              <img :src="'data:image/png;base64,' + img" style="width:100%; border-radius: 6px;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Correlations Tab -->
+        <div v-if="edaTab === 'correlations'">
+          <div v-if="eda.correlation_heatmap" class="card" style="text-align: center;">
+            <img :src="'data:image/png;base64,' + eda.correlation_heatmap" style="max-width:100%; border-radius: 6px;" />
+          </div>
+          <div v-else class="card" style="text-align:center; color: #64748b;">
+            Need at least 2 numeric columns for correlation analysis.
+          </div>
+        </div>
+
+        <!-- Missing Tab -->
+        <div v-if="edaTab === 'missing'">
+          <div v-if="eda.missing_heatmap" class="card" style="text-align: center;">
+            <img :src="'data:image/png;base64,' + eda.missing_heatmap" style="max-width:100%; border-radius: 6px;" />
+          </div>
+          <div v-else class="card" style="text-align:center; color: #64748b;">
+            <p style="font-size: 2rem; margin-bottom: 0.5rem;">✅</p>
+            No missing values found in the dataset.
+          </div>
+        </div>
+
+        <!-- Train Tab -->
+        <div v-if="edaTab === 'train'">
+          <div class="card" style="margin-bottom: 1rem;">
+            <h3 style="color: #e2e8f0; font-weight: 600; margin-bottom: 1rem;">Training Configuration</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label>Target Column</label>
+                <select v-model="trainConfig.targetCol">
+                  <option value="">-- Select target --</option>
+                  <option v-for="col in eda.overview.columns" :key="col" :value="col">{{col}}</option>
+                </select>
+              </div>
+              <div>
+                <label>Train/Test Split</label>
+                <select v-model.number="trainConfig.testSize">
+                  <option :value="0.1">90% / 10%</option>
+                  <option :value="0.2">80% / 20%</option>
+                  <option :value="0.25">75% / 25%</option>
+                  <option :value="0.3">70% / 30%</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label>Algorithms</label>
+              <div class="checkbox-group">
+                <div v-for="algo in availableAlgorithms" :key="algo" class="checkbox-item" :class="{selected: trainConfig.algorithms.includes(algo)}" @click="toggleAlgo(algo)">
+                  <input type="checkbox" :checked="trainConfig.algorithms.includes(algo)" />
+                  {{algo}}
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; margin:0;">
+                <input type="checkbox" v-model="trainConfig.tuneHyperparams" style="width:auto;" />
+                <span style="color:#e2e8f0; font-size:0.875rem;">Hyperparameter Tuning (GridSearchCV)</span>
+              </label>
+              <button class="btn btn-primary" @click="startTraining" :disabled="!trainConfig.targetCol || trainConfig.algorithms.length === 0 || training">
+                <span v-if="training"><span class="spinner" style="width:14px;height:14px;border-width:2px;margin-right:0.375rem;vertical-align:middle;"></span> Training...</span>
+                <span v-else>🚀 Start Training</span>
+              </button>
+            </div>
+            <div v-if="detectedProblemType" style="margin-top: 0.75rem;">
+              <span class="badge" :class="detectedProblemType === 'classification' ? 'badge-green' : 'badge-blue'">
+                Detected: {{detectedProblemType === 'classification' ? 'Classification' : 'Regression'}}
+              </span>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div v-if="results">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+              <h3 style="color: #e2e8f0; font-weight: 600;">Results</h3>
+              <span class="badge" :class="results.problem_type === 'classification' ? 'badge-green' : 'badge-blue'">
+                {{results.problem_type === 'classification' ? 'Classification' : 'Regression'}}
+              </span>
+              <span v-if="results.best_model" class="badge badge-amber">🏆 Best: {{results.best_model}}</span>
+            </div>
+
+            <!-- Metrics -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+              <div v-for="(model, i) in results.models" :key="i" class="metric-card" style="cursor:pointer;" :class="{highlight: model.algorithm === results.best_model}" @click="selectedModel = selectedModel === model.algorithm ? null : model.algorithm">
+                <div class="metric-value" style="font-size: 1.1rem;">{{model.algorithm}}</div>
+                <div v-if="results.problem_type === 'classification'" style="margin-top: 0.5rem;">
+                  <span style="font-size:1.25rem; font-weight:700; color:#818cf8;">{{(model.metrics.accuracy * 100).toFixed(1)}}%</span>
+                  <div style="font-size:0.65rem; color:#64748b;">Accuracy</div>
+                </div>
+                <div v-else style="margin-top: 0.5rem;">
+                  <span style="font-size:1.25rem; font-weight:700; color:#818cf8;">{{(model.metrics.r2 || 0).toFixed(3)}}</span>
+                  <div style="font-size:0.65rem; color:#64748b;">R² Score</div>
+                </div>
+                <div v-if="model.error" style="color:#ef4444; font-size:0.75rem;">{{model.error}}</div>
+              </div>
+            </div>
+
+            <!-- Selected Model Details -->
+            <div v-if="selectedModel" class="card" style="margin-bottom: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #e2e8f0; font-weight: 600;">{{selectedModel}} — Details</h3>
+                <button class="btn btn-secondary" @click="downloadModel(selectedModel)" style="font-size:0.75rem;">⬇ Download .pkl</button>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+                <div v-for="(val, key) in selectedModelData.metrics" :key="key" class="metric-card" v-if="!['confusion_matrix','classification_report','actual_vs_predicted'].includes(key)">
+                  <div class="metric-value" style="font-size:1.25rem;">{{typeof val === 'number' ? (key === 'accuracy' ? (val*100).toFixed(1) + '%' : val.toFixed(4)) : val}}</div>
+                  <div class="metric-label">{{key.toUpperCase()}}</div>
+                </div>
+              </div>
+              <div v-if="selectedModelData.best_params && Object.keys(selectedModelData.best_params).length">
+                <h4 style="color:#94a3b8; font-size:0.8rem; font-weight:600; margin-bottom:0.5rem;">Best Parameters</h4>
+                <pre style="background:#172033; padding:0.75rem; border-radius:6px; font-size:0.75rem; color:#a5b4fc; font-family:'JetBrains Mono',monospace;">{{JSON.stringify(selectedModelData.best_params, null, 2)}}</pre>
+              </div>
+              <div v-if="results.problem_type === 'classification' && selectedModelData.metrics.confusion_matrix" style="margin-top: 1rem;">
+                <h4 style="color:#94a3b8; font-size:0.8rem; font-weight:600; margin-bottom:0.5rem;">Confusion Matrix</h4>
+                <div style="overflow-x:auto;">
+                  <table style="font-size:0.75rem; border-collapse:collapse; margin:0 auto;">
+                    <tr v-for="(row, ri) in selectedModelData.metrics.confusion_matrix" :key="ri">
+                      <td v-for="(val, ci) in row" :key="ci" style="padding:0.5rem 0.75rem; border:1px solid #334155; text-align:center; background:rgba(99,102,241,{{Math.min(val / maxCM, 0.3)}}); color:#e2e8f0; font-weight:600;">{{val}}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Plot -->
+            <div v-if="plots && plots.comparison" class="card" style="text-align:center;">
+              <h3 style="color: #e2e8f0; font-weight: 600; margin-bottom: 0.75rem;">Model Comparison</h3>
+              <img :src="'data:image/png;base64,' + plots.comparison" style="max-width:100%; border-radius: 6px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sessions View -->
+    <div v-if="view === 'sessions'">
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 1.5rem;">Sessions</h2>
+      <div v-if="sessions.length === 0" class="card" style="text-align: center; color: #64748b; padding: 3rem;">
+        <p style="font-size: 2rem; margin-bottom: 0.5rem;">📂</p>
+        <p>No sessions yet. Upload a CSV to get started.</p>
+      </div>
+      <div v-for="s in sessions" :key="s.id" class="card" style="margin-bottom: 0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" @click="loadSession(s.id)">
+        <div>
+          <p style="color:#e2e8f0; font-weight:600;">{{s.filename}}</p>
+          <p style="color:#64748b; font-size:0.75rem;">{{s.rows.toLocaleString()}} rows · {{s.columns}} cols · {{s.created}}</p>
+          <p v-if="s.trained" style="font-size:0.75rem;">
+            <span class="badge badge-green">Trained</span>
+            <span v-if="s.best_model" class="badge badge-amber" style="margin-left:0.25rem;">🏆 {{s.best_model}}</span>
+          </p>
+        </div>
+        <span style="color:#64748b;">→</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div v-if="toast" class="toast" :class="'toast-' + toast.type" style="position:fixed; bottom:1.5rem; right:1.5rem; padding:0.75rem 1.25rem; border-radius:10px; font-size:0.875rem; z-index:100;">
+  {{toast.message}}
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAISS Semantic Search — Pawan Allem</title>
+  <title>Speech Coach — Pawan Allem</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#6366f1',primaryTextColor:'#fff',primaryBorderColor:'#4f46e5',lineColor:'#6366f1',secondaryColor:'#1e293b',tertiaryColor:'#0f172a',clusterBkg:'#172033',clusterBorder:'#334155',nodeBorder:'#334155',mainBkg:'#1e293b',fontSize:'14px'}});</script>
@@ -23,10 +23,11 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .feature-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .feature-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.15); }
     ::-webkit-scrollbar { width: 8px; }
@@ -54,17 +55,17 @@
         <span class="text-sm font-medium text-primary-400 bg-primary-500/10 px-3 py-1 rounded-full">Project</span>
         <span class="text-sm text-slate-500">2026</span>
       </div>
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">FAISS Semantic Search</h1>
-      <p class="text-lg sm:text-xl text-slate-400 leading-relaxed mb-6">A scalable semantic search service that indexes documents with FAISS vector embeddings and retrieves relevant results with similarity scores via REST API.</p>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Speech Coach</h1>
+      <p class="text-lg sm:text-xl text-slate-400 leading-relaxed mb-6">Practice spoken English through live roleplay conversations with AI. Get structured coaching feedback on grammar, fluency, and pronunciation — entirely open-source and locally runnable.</p>
       <div class="flex flex-wrap gap-3 mb-8">
         <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Python</span>
-        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">FAISS</span>
-        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">FastAPI</span>
-        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">sentence-transformers</span>
-        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Docker</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">faster-whisper</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Piper TTS</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">wav2vec2</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">LLM</span>
       </div>
       <div class="flex flex-wrap gap-4">
-        <a href="https://github.com/AllemPawan/faiss-semantic-search" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm transition-all shadow-lg shadow-primary-600/25">
+        <a href="https://github.com/AllemPawan/Portfolio-Website" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm transition-all shadow-lg shadow-primary-600/25">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           View on GitHub
         </a>
@@ -76,8 +77,8 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white mb-6">Overview</h2>
       <div class="text-slate-400 leading-relaxed space-y-4">
-        <p>The FAISS Semantic Search service provides a complete document indexing and semantic retrieval pipeline. Upload documents, generate embeddings using sentence transformers, index them with FAISS for fast approximate nearest neighbor search, and query with natural language.</p>
-        <p>Results include similarity scores and top-k configuration. Built as a REST API with FastAPI for easy integration into larger systems. Fully containerized with Docker.</p>
+        <p>Speech Coach is a live roleplay system for practicing spoken English. You speak naturally into your microphone, an AI conversation partner responds out loud via neural text-to-speech, and at the end of each session you receive a structured coaching report covering grammar corrections, fluency metrics, pronunciation trends, and prioritized improvement areas.</p>
+        <p>The entire speech pipeline (STT, pronunciation scoring, TTS) runs locally using open-source models — no cloud dependency, no API keys, no usage costs. The LLM for roleplay and judging is switchable between Claude API (best quality) and any local OpenAI-compatible server (Ollama, LM Studio, vLLM) for a fully offline setup.</p>
       </div>
     </div>
   </section>
@@ -88,19 +89,19 @@
       <div class="grid sm:grid-cols-2 gap-4">
         <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
           <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-lg shrink-0">📄</div>
+            <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-lg shrink-0">🎙️</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Upload Documents</h3>
-              <p class="text-slate-400 text-sm">Upload text documents or PDFs for automatic indexing.</p>
+              <h3 class="text-white font-semibold mb-1">Live Spoken Conversation</h3>
+              <p class="text-slate-400 text-sm">AI partner hears you via STT and speaks back via neural TTS — natural back-and-forth.</p>
             </div>
           </div>
         </div>
         <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
           <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-lg shrink-0">🧠</div>
+            <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-lg shrink-0">🎭</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Generate Embeddings</h3>
-              <p class="text-slate-400 text-sm">Convert documents to dense vector embeddings using sentence-transformers.</p>
+              <h3 class="text-white font-semibold mb-1">Roleplay Scenarios</h3>
+              <p class="text-slate-400 text-sm">Job Interview, Small Talk, Friendly Debate — each with distinct character prompts.</p>
             </div>
           </div>
         </div>
@@ -108,26 +109,26 @@
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-lg shrink-0">📊</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Index Using FAISS</h3>
-              <p class="text-slate-400 text-sm">Fast approximate nearest neighbor search with FAISS indexing.</p>
+              <h3 class="text-white font-semibold mb-1">Pronunciation Scoring</h3>
+              <p class="text-slate-400 text-sm">Phoneme-level accuracy via wav2vec2 — locally computed, no cloud API.</p>
             </div>
           </div>
         </div>
         <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
           <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-lg shrink-0">🔍</div>
+            <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-lg shrink-0">📝</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Semantic Search</h3>
-              <p class="text-slate-400 text-sm">Query in natural language — find documents by meaning, not just keywords.</p>
+              <h3 class="text-white font-semibold mb-1">Coaching Report</h3>
+              <p class="text-slate-400 text-sm">Structured feedback: strengths, grammar fixes, fluency notes, top 3 priorities, resources.</p>
             </div>
           </div>
         </div>
         <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
           <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-lg shrink-0">🎯</div>
+            <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-lg shrink-0">💻</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Top-k Retrieval</h3>
-              <p class="text-slate-400 text-sm">Configurable number of results to return per query.</p>
+              <h3 class="text-white font-semibold mb-1">Fully Local Option</h3>
+              <p class="text-slate-400 text-sm">Entire pipeline runs on your machine with Ollama + open-source models — zero cloud costs.</p>
             </div>
           </div>
         </div>
@@ -135,35 +136,8 @@
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-lg shrink-0">📈</div>
             <div>
-              <h3 class="text-white font-semibold mb-1">Similarity Scores</h3>
-              <p class="text-slate-400 text-sm">Cosine similarity scores for each retrieved result.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-lg shrink-0">📦</div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Batch Indexing</h3>
-              <p class="text-slate-400 text-sm">Index multiple documents in a single request with parallel processing.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center text-lg shrink-0">🔌</div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">REST API</h3>
-              <p class="text-slate-400 text-sm">Full REST API with Swagger docs for programmatic access.</p>
-            </div>
-          </div>
-        </div>
-        <div class="feature-card p-5 rounded-xl bg-surface-900 border border-slate-800/60">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-teal-500/10 flex items-center justify-center text-lg shrink-0">🐳</div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Docker Support</h3>
-              <p class="text-slate-400 text-sm">Containerized with model caching for fast startup.</p>
+              <h3 class="text-white font-semibold mb-1">Progress Tracking</h3>
+              <p class="text-slate-400 text-sm">Every session saved to JSON — track phoneme accuracy and fluency across sessions.</p>
             </div>
           </div>
         </div>
@@ -177,33 +151,19 @@
       <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
         <div class="mermaid">
 flowchart TD
-  Client["Client / User"] -->|"POST /api/index"| API["FastAPI REST API"]
+  USER["You (Microphone)"] --> STT["faster-whisper<br/>Speech-to-Text"]
+  STT --> LLM["LLM<br/>Roleplay Partner"]
+  LLM --> TTS["Piper TTS<br/>Neural Text-to-Speech"]
+  TTS --> USER
 
-  subgraph IDX["Indexing Pipeline"]
-    PP["Doc Pre-processor<br/>(chunk + clean)"] --> ST["sentence-transformers<br/>(all-MiniLM-L6-v2)"]
-    ST --> FAISS["FAISS Index<br/>(ANN vector search)"]
-    FAISS --> PERSIST["Index Persistence<br/>(save/load to disk)"]
-    FAISS --> META["Metadata Store"]
-  end
+  STT --> PRON["wav2vec2<br/>Pronunciation Scoring"]
+  STT --> FLUENCY["Fluency Metrics<br/>WPM, Filler Words"]
 
-  subgraph QRY["Query Flow"]
-    Q["Natural Language Query"] --> EQ["Embed Query<br/>(same model)"]
-    EQ --> FS["FAISS Similarity Search<br/>(top-k)"]
-    FS --> RES["Ranked Results<br/>&#9654; Documents + Scores<br/>&#9654; Metadata<br/>&#9654; Configurable k"]
-  end
+  PRON --> REPORT["Coaching Report<br/>LLM + Aggregated Signals"]
+  FLUENCY --> REPORT
+  LLM --> REPORT
 
-  API --> IDX
-  API --> QRY
-
-  style Client fill:#6366f1,stroke:#4f46e5,color:#fff
-  style API fill:#1e293b,stroke:#6366f1,color:#e2e8f0
-  style IDX fill:#0f172a,stroke:#334155,color:#fff
-  style QRY fill:#0f172a,stroke:#334155,color:#fff
-  style FAISS fill:#172033,stroke:#10b981,color:#94a3b8
-  style FS fill:#172033,stroke:#10b981,color:#94a3b8
-  style RES fill:#172033,stroke:#334155,color:#94a3b8
-  style ST fill:#172033,stroke:#6366f1,color:#94a3b8
-  style EQ fill:#172033,stroke:#6366f1,color:#94a3b8
+  REPORT --> LOG["session_logs/*.json"]
 </div>
       </div>
     </div>
@@ -214,22 +174,26 @@ flowchart TD
       <h2 class="text-2xl font-bold text-white mb-6">Getting Started</h2>
       <div class="p-6 rounded-xl bg-surface-900 border border-slate-800/60">
         <pre class="text-sm text-slate-300 font-mono leading-relaxed overflow-x-auto">
-<span class="text-slate-600"># Clone & run</span>
-git clone https://github.com/AllemPawan/faiss-semantic-search.git
-cd faiss-semantic-search
-docker compose up -d
+<span class="text-slate-600"># Clone the repo</span>
+git clone https://github.com/AllemPawan/Portfolio-Website.git
+cd Portfolio-Website/projects/speech_coach
 
-<span class="text-slate-600"># Open http://localhost:8000</span>
+<span class="text-slate-600"># Install Python dependencies</span>
+pip install faster-whisper transformers torch phonemizer python-Levenshtein \
+            sounddevice soundfile numpy anthropic openai piper-tts
 
-<span class="text-slate-600"># Index a document</span>
-curl -X POST http://localhost:8000/api/index \
-  -H "Content-Type: application/json" \
-  -d '{"documents": [{"id": "1", "text": "Your document text here..."}]}'
+<span class="text-slate-600"># Install system dep for phonemizer (Linux)</span>
+sudo apt-get install espeak-ng
 
-<span class="text-slate-600"># Search</span>
-curl -X POST http://localhost:8000/api/search \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What is this about?", "top_k": 5}'</pre>
+<span class="text-slate-600"># Download a Piper voice</span>
+python3 -m piper.download_voices en_US-lessac-medium
+
+<span class="text-slate-600"># Set LLM provider (Claude API)</span>
+export LLM_PROVIDER="anthropic"
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+<span class="text-slate-600"># Run!</span>
+python main.py</pre>
       </div>
     </div>
   </section>

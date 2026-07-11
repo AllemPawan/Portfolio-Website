@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoML Pipeline — Pawan Allem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#6366f1',primaryTextColor:'#fff',primaryBorderColor:'#4f46e5',lineColor:'#6366f1',secondaryColor:'#1e293b',tertiaryColor:'#0f172a',clusterBkg:'#172033',clusterBorder:'#334155',nodeBorder:'#334155',mainBkg:'#1e293b',fontSize:'14px'}});</script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+            surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#020617' },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'Fira Code', 'monospace'] },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .feature-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .feature-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.15); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-surface-950 text-slate-300 dark">
+
+  <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-lg border-b border-white/5" style="background: rgba(15, 23, 42, 0.85);">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Back to Portfolio
+        </a>
+        <a href="/" class="text-lg font-bold text-white tracking-tight">PA<span class="text-primary-400">.</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="pt-32 pb-16" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #172033 100%);">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-sm font-medium text-primary-400 bg-primary-500/10 px-3 py-1 rounded-full">Project</span>
+        <span class="text-sm text-slate-500">2026</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Automated ML Pipeline</h1>
+      <p class="text-lg sm:text-xl text-slate-400 leading-relaxed mb-6">Upload a CSV and let the pipeline handle the rest — exploratory data analysis, feature engineering, multi-model training, hyperparameter tuning, and model comparison, all through an interactive dashboard.</p>
+      <div class="flex flex-wrap gap-3 mb-8">
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Python</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">FastAPI</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">scikit-learn</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">pandas</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">matplotlib</span>
+        <span class="text-sm px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 border border-slate-700/50">Docker</span>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a href="frontend/" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold transition-all shadow-lg shadow-primary-600/25">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Launch Dashboard
+        </a>
+        <a href="https://github.com/AllemPawan/automated-ml-pipeline" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-700 hover:border-primary-500 text-slate-300 hover:text-white font-semibold transition-all">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          Source Code
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-8">Architecture</h2>
+      <div class="bg-surface-900 border border-slate-800/60 rounded-xl p-6 mb-12">
+        <div class="mermaid">
+          flowchart LR
+            A["📄 CSV Upload"] --> B["FastAPI Backend"]
+            B --> C["EDA Engine<br/><small>pandas, matplotlib, seaborn</small>"]
+            B --> D["Feature Engineering<br/><small>imputation, encoding, scaling</small>"]
+            B --> E["Model Trainer<br/><small>scikit-learn, GridSearchCV</small>"]
+            C --> F["📊 EDA Dashboard"]
+            D --> E
+            E --> G["🏆 Model Comparison"]
+            E --> H["📦 Model Export (.pkl)"]
+            G --> I["Interactive Frontend<br/><small>Vue.js + Tailwind</small>"]
+            H --> I
+
+            style A fill:#1e293b,stroke:#6366f1,color:#e2e8f0
+            style B fill:#4f46e5,stroke:#4338ca,color:#fff
+            style C fill:#172033,stroke:#334155,color:#cbd5e1
+            style D fill:#172033,stroke:#334155,color:#cbd5e1
+            style E fill:#172033,stroke:#334155,color:#cbd5e1
+            style F fill:#172033,stroke:#334155,color:#cbd5e1
+            style G fill:#172033,stroke:#334155,color:#cbd5e1
+            style H fill:#172033,stroke:#334155,color:#cbd5e1
+            style I fill:#1e293b,stroke:#6366f1,color:#e2e8f0
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-8">Features</h2>
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-lg mb-4">📊</div>
+          <h3 class="text-white font-semibold mb-2">Auto EDA</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Comprehensive exploratory data analysis — statistics, distributions, correlation heatmaps, missing value analysis, and class balance visualization.</p>
+        </div>
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-lg mb-4">⚙️</div>
+          <h3 class="text-white font-semibold mb-2">Auto Preprocessing</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Smart feature type detection, missing value imputation, categorical encoding, and feature scaling — no manual configuration needed.</p>
+        </div>
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-lg mb-4">🧠</div>
+          <h3 class="text-white font-semibold mb-2">Multi-Model Training</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">6 classification and 7 regression algorithms with automatic problem type detection. Compare Logistic Regression, Random Forest, XGBoost, SVM, and more.</p>
+        </div>
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-lg mb-4">🎯</div>
+          <h3 class="text-white font-semibold mb-2">Hyperparameter Tuning</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">GridSearchCV-based hyperparameter optimization with sensible parameter grids for each algorithm. Toggle on/off as needed.</p>
+        </div>
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-lg mb-4">🏆</div>
+          <h3 class="text-white font-semibold mb-2">Model Comparison</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Side-by-side metrics comparison, confusion matrices, and visual charts to identify the best performing model for your data.</p>
+        </div>
+        <div class="feature-card p-6 rounded-xl bg-surface-900 border border-slate-800/60">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-lg mb-4">📦</div>
+          <h3 class="text-white font-semibold mb-2">Model Export</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Download trained models as .pkl files ready for production deployment. Session management keeps your work organized.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-8">How It Works</h2>
+      <div class="space-y-6">
+        <div class="flex gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-primary-400 font-bold shrink-0">1</div>
+          <div>
+            <h3 class="text-white font-semibold mb-1">Upload CSV</h3>
+            <p class="text-slate-400 text-sm">Drag and drop any CSV file. The pipeline immediately runs a full EDA and presents statistics, visualizations, and data quality metrics.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-primary-400 font-bold shrink-0">2</div>
+          <div>
+            <h3 class="text-white font-semibold mb-1">Configure Training</h3>
+            <p class="text-slate-400 text-sm">Select the target column, choose algorithms, set test split ratio, and optionally enable hyperparameter tuning. Problem type (classification/regression) is auto-detected.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-primary-400 font-bold shrink-0">3</div>
+          <div>
+            <h3 class="text-white font-semibold mb-1">Train & Compare</h3>
+            <p class="text-slate-400 text-sm">All selected algorithms train in parallel. View detailed metrics, confusion matrices, and comparison charts to pick the best model.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-primary-400 font-bold shrink-0">4</div>
+          <div>
+            <h3 class="text-white font-semibold mb-1">Export & Deploy</h3>
+            <p class="text-slate-400 text-sm">Download any trained model as a serialized .pkl file. Sessions persist on the server for later review.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white mb-8">Tech Stack</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">🐍</div>
+          <div class="text-sm text-slate-300 font-medium">Python</div>
+          <div class="text-xs text-slate-500">3.11+</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">⚡</div>
+          <div class="text-sm text-slate-300 font-medium">FastAPI</div>
+          <div class="text-xs text-slate-500">Async backend</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">🤖</div>
+          <div class="text-sm text-slate-300 font-medium">scikit-learn</div>
+          <div class="text-xs text-slate-500">13 models</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">📊</div>
+          <div class="text-sm text-slate-300 font-medium">pandas</div>
+          <div class="text-xs text-slate-500">Data analysis</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">📉</div>
+          <div class="text-sm text-slate-300 font-medium">matplotlib</div>
+          <div class="text-xs text-slate-500">Visualization</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">🔬</div>
+          <div class="text-sm text-slate-300 font-medium">seaborn</div>
+          <div class="text-xs text-slate-500">Statistical plots</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">🐳</div>
+          <div class="text-sm text-slate-300 font-medium">Docker</div>
+          <div class="text-xs text-slate-500">Containerized</div>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-slate-800/60 text-center">
+          <div class="text-2xl mb-2">📦</div>
+          <div class="text-sm text-slate-300 font-medium">Vue.js</div>
+          <div class="text-xs text-slate-500">Dashboard UI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-12 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-slate-500 text-sm">© 2026 Pawan Allem</p>
+    </div>
+  </footer>
+
+</body>
+</html>
